@@ -1,0 +1,28 @@
+{
+  "name": "discord-deleted-message-logger",
+  "version": "1.0.0",
+  "description": "Bot that logs the deleted messages in the serverthen sends it in a channel",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ysdenz/discord-deleted-message-logger.git"
+  },
+  "author": "ydenz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ysdenz/discord-deleted-message-logger/issues"
+  },
+  "homepage": "https://github.com/ysdenz/discord-deleted-message-logger#readme",
+  "dependencies": {
+    "@vitalets/google-translate-api": "^4.0.0",
+    "common-tags": "^1.8.0",
+    "discord.js": "^12.1.1",
+    "dotenv": "^8.2.0",
+    "i": "^0.3.6",
+    "npm": "^6.14.8"
+  }
+}
