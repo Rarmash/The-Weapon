@@ -1,7 +1,7 @@
 const { Client, MessageEmbed } = require('discord.js');
 const client = new Client({ partials: ['MESSAGE'] });
 
-client.login('OTM1NTYwOTY4Nzc4NDQ4OTQ3.YfAbDA.NdLXCXZAwOMWrqKrAsHnVlImjsg');
+client.login('OTM1NTYwOTY4Nzc4NDQ4OTQ3.YfAbDA.0HTrBBZrFaHuOs3gWSNtZQs5dl8');
 
 client.on('ready', () => {
     console.log(`${client.user.tag} logged in.`);
