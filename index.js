@@ -13,7 +13,7 @@ client.on('ready', () => {
 client.on('messageDelete', message => {
     if(!message.partial) {
         const channel = client.channels.cache.get('952519133117960192');
-        if((channel) && (channel !== '647756597904408617')) {
+        if((channel) && ((message.channel.id != '647756597904408617') && (message.channel.id != '952519133117960192'))) {
             const embed = new MessageEmbed()
                 .setTitle('Удалённое сообщение')
                 .setColor('#209af8')
