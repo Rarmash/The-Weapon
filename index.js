@@ -5,7 +5,10 @@ client.login('OTM1NTYwOTY4Nzc4NDQ4OTQ3.YfAbDA.0HTrBBZrFaHuOs3gWSNtZQs5dl8');
 
 client.on('ready', () => {
     console.log(`${client.user.tag} logged in.`);
-    client.user.setActivity('за ореолом Дзета', { type: 'WATCHING' })
+    client.user.setActivity('за ореолом Дзета', { 
+        type: 'WATCHING',
+        url: 'https://www.twitch.tv/halo' 
+    })
 		  .then(presence => console.log(`Activity set to ${presence.activities[0].name}`))
 		  .catch(console.error);
 });
