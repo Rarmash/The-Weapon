@@ -18,8 +18,8 @@ client.on('messageDelete', message => {
         const channel = client.channels.cache.get('952519133117960192');
         if((channel) && ((message.channel.id != '647756597904408617') && (message.channel.id != '952519133117960192') && (message.author.id != '239631525350604801'))) {
             const embed = new MessageEmbed()
-                .setTitle('Сообщение удалено')
-                .setColor('#6600ff')
+                .setTitle('Удалённое сообщение')
+                .setColor('#209af8')
                 .addField('Автор', `<@${message.author.id}>`, true)
                 .addField('Канал', `<#${message.channel.id}>`, true)
                 .setDescription(message.content);
