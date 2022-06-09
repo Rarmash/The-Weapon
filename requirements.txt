@@ -1,2 +1,2 @@
 discord.py==1.7.3
-setuptools==58.1.0
+python-dotenv==0.20.0

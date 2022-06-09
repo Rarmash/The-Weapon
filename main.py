@@ -17,10 +17,10 @@ bot = commands.Bot(command_prefix='!', case_insensitive=True)
 async def on_ready():
     print("------")
     print("Bot is ready!")
-    print("Logged in as: " + bot.user.name)
-    print("Bot ID: " + str(bot.user.id))
+    print(f"Logged in as: {bot.user.name}")
+    print(f"Bot ID: {str(bot.user.id)}")
     for guild in bot.guilds:
-        print ("Connected to server: {}".format(guild))
+        print(f"Connected to server: {guild}")
     print("------")
     await bot.change_presence(status=discord.Status.do_not_disturb, activity=discord.Game('Halo Infinite Battle Royale'))
 
