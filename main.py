@@ -40,7 +40,6 @@ async def on_message_delete(ctx):
         name = 'Канал',
         value = f'<#{ctx.channel.id}>'
     )
-    embed.set_footer(text = "Powered by R4")
     if (ctx.channel.id not in bannedChannels) and (ctx.author.id not in bannedUsers):
         await channel.send(embed = embed)
         
