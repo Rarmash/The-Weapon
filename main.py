@@ -11,7 +11,7 @@ intents = discord.Intents.default()
 intents.members=True
 intents.messages=True
 
-bot = commands.Bot(command_prefix='?', case_insensitive=True)
+bot = commands.Bot(command_prefix='!', case_insensitive=True)
 
 @bot.event
 async def on_ready():
