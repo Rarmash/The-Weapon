@@ -8,11 +8,14 @@ class Poll(commands.Cog):
     @commands.command()
     async def poll(self, ctx, *, question=None):
         if question is None:
+            await ctx.message.delete()
             await ctx.send("Пожалуйста, укажите ваше предложение!")
         else:
-            pollEmbed = discord.Embed(title = "Новое предложение!", description = f"{question}", color = 0x209af8)
-            pollEmbed.set_footer(text = f"{ctx.author} предложил идею", icon_url = ctx.author.avatar_url)
-            pollEmbed.timestamp = ctx.message.created_at 
+            pollEmbed = discord.Embed(title = "Новое предложение", description = f"{question}", color = 0x209af8)
+            pollEmbed.add_field(
+                name = 'Автор',
+                value = f'<@{ctx.author.id}>'
+            )
             await ctx.message.delete()
             poll_msg = await ctx.send(embed = pollEmbed)
 
