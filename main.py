@@ -1,9 +1,11 @@
 from options import token as discordToken
 from options import log_channel as logger
+from options import admin_id as administrator
 import discord
 from discord.ext import commands
 from bannedChannels import bannedChannels
 from bannedUsers import bannedUsers
+import os
 
 intents = discord.Intents.default()
 intents.members=True
@@ -20,7 +22,7 @@ async def on_ready():
     for guild in bot.guilds:
         print ("Connected to server: {}".format(guild))
     print("------")
-    await bot.change_presence(activity=discord.Game('Halo Infinite Battle Royale'))
+    await bot.change_presence(status=discord.Status.do_not_disturb, activity=discord.Game('Halo Infinite Battle Royale'))
 
 @bot.event
 async def on_message_delete(ctx):
@@ -41,5 +43,36 @@ async def on_message_delete(ctx):
     embed.set_footer(text = "Powered by R4")
     if (ctx.channel.id not in bannedChannels) and (ctx.author.id not in bannedUsers):
         await channel.send(embed = embed)
+        
+@bot.command()
+async def unload(ctx, extension):
+    if ctx.author.id == administrator:
+        bot.unload_extension(f"cogs.{extension}")
+        await ctx.send("Ког выгружается...")
+    else:
+        await ctx.send("Недостаточно прав для выполнения данной команды.")
+
+
+@bot.command()
+async def load(ctx, extension):
+    if ctx.author.id == administrator:
+        bot.load_extension(f"cogs.{extension}")
+        await ctx.send("Ког запускается...")
+    else:
+        await ctx.send("Недостаточно прав для выполнения данной команды.")
+
+
+@bot.command()
+async def reload(ctx, extension):
+    if ctx.author.id == administrator:
+        bot.unload_extension(f"cogs.{extension}")
+        bot.load_extension(f"cogs.{extension}")
+        await ctx.send("Ког перезапускается...")
+    else:
+        await ctx.send("Недостаточно прав для выполнения данной команды.")
+
+for filename in os.listdir("./cogs"):
+    if filename.endswith(".py") and filename != "__init__.py":
+        bot.load_extension(f'cogs.{filename[:-3]}')
     
 bot.run(discordToken)
