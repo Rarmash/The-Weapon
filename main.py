@@ -40,7 +40,6 @@ async def on_message_delete(ctx):
         name = 'Канал',
         value = f'<#{ctx.channel.id}>'
     )
-    print(ctx.content)
     if (ctx.channel.id not in bannedChannels) and (ctx.author.id not in bannedUsers) and (str(ctx.content)[1:5] != 'poll')  and (not ctx.author.bot):
         await channel.send(embed = embed)
         
