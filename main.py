@@ -22,7 +22,7 @@ async def on_ready():
     for guild in bot.guilds:
         print(f"Connected to server: {guild}")
     print("------")
-    await bot.change_presence(status=discord.Status.do_not_disturb, activity=discord.Game('Halo Infinite Battle Royale'))
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="за этой установкой"))
 
 @bot.event
 async def on_message_delete(ctx):
