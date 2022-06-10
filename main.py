@@ -43,6 +43,31 @@ async def on_message_delete(ctx):
     if (ctx.channel.id not in bannedChannels) and (ctx.author.id not in bannedUsers) and (str(ctx.content)[1:5] != 'poll')  and (not ctx.author.bot):
         await channel.send(embed = embed)
         
+@bot.event
+async def on_message_edit(before, after):
+    channel = bot.get_channel(logger)
+    embed = discord.Embed(
+        color = 0x209af8
+        )
+    embed.add_field(
+        name = "Редактированное сообщение",
+        value = after.content
+        )
+    embed.add_field(
+        name = "Оригинальное сообщение",
+        value = before.content
+        )
+    embed.add_field(
+        name = 'Автор',
+        value = f'<@{before.author.id}>'
+    )
+    embed.add_field(
+        name = 'Канал',
+        value = f'<#{before.channel.id}>'
+    )
+    if (before.channel.id not in bannedChannels) and (before.author.id not in bannedUsers) and (str(before.content)[1:5] != 'poll')  and (not before.author.bot):
+        await channel.send(embed = embed)
+        
 @bot.command()
 async def unload(ctx, extension):
     if ctx.author.id == administrator:
