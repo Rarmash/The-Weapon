@@ -65,7 +65,7 @@ async def on_message_edit(before, after):
         name = 'Канал',
         value = f'<#{before.channel.id}>'
     )
-    if (before.channel.id not in bannedChannels) and (before.author.id not in bannedUsers) and (str(before.content)[1:5] != 'poll')  and (not before.author.bot):
+    if (before.channel.id not in bannedChannels) and (before.author.id not in bannedUsers) and (str(before.content)[1:5] != 'poll')  and (not before.author.bot) and (before.content != after.content):
         await channel.send(embed = embed)
         
 @bot.command()
