@@ -12,7 +12,7 @@ intents.presences = True
 intents.members=True
 intents.messages=True
 
-bot = commands.Bot(command_prefix='!', case_insensitive=True, presences = True)
+bot = commands.Bot(command_prefix='!', case_insensitive=True, intents=intents)
 
 @bot.event
 async def on_ready():
