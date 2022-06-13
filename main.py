@@ -7,11 +7,12 @@ from bannedChannels import bannedChannels
 from bannedUsers import bannedUsers
 import os
 
-intents = discord.Intents.default()
+intents = discord.Intents.all()
+intents.presences = True
 intents.members=True
 intents.messages=True
 
-bot = commands.Bot(command_prefix='!', case_insensitive=True)
+bot = commands.Bot(command_prefix='!', case_insensitive=True, presences = True)
 
 @bot.event
 async def on_ready():
