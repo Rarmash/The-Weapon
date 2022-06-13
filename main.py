@@ -52,11 +52,13 @@ async def on_message_edit(before, after):
         )
     embed.add_field(
         name = "Редактированное сообщение",
-        value = after.content
+        value = after.content,
+        inline=False
         )
     embed.add_field(
         name = "Оригинальное сообщение",
-        value = before.content
+        value = before.content,
+        inline=False
         )
     embed.add_field(
         name = 'Автор',
