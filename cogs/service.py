@@ -10,6 +10,20 @@ class Service(commands.Cog):
         self.bot = bot
     
     @commands.command()
+    async def server(self, ctx, guild: discord.Guild = None):
+        guild = ctx.guild if not guild else guild
+        embed = discord.Embed(title=f"Информация о сервере {guild}", color = 0x209af8)
+        embed.set_thumbnail(url=guild.icon_url)
+        embed.add_field(name="Описание", value=guild.description)
+        embed.add_field(name="Количество каналов", value=len(guild.channels))
+        embed.add_field(name="Количество ролей", value=len(guild.roles))
+        embed.add_field(name="Количество бустеров", value=len(guild.premium_subscribers))
+        embed.add_field(name="Количество участников", value=guild.member_count)
+        embed.add_field(name="Дата создания", value=str(guild.created_at)[:-7])
+        embed.add_field(name="Владелец сервера", value=guild.owner)
+        await ctx.send(embed=embed)        
+    
+    @commands.command()
     async def ping(self, ctx):
         st = time()
         message = await ctx.send(f"Понг! :ping_pong: Задержка: {self.bot.latency*1000:,.0f} ms.")
