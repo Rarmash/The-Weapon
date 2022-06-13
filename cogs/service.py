@@ -28,6 +28,11 @@ class Service(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
+    async def pateufeek(self, ctx):
+        await ctx.message.delete()
+        await ctx.send("https://media.discordapp.net/attachments/964614960325992478/982716016184410122/4c8de376-2ee8-4938-b3bb-38f51b823875-4.gif")
+
+    @commands.command()
     async def hello(self, ctx):
         author = ctx.message.author
         await ctx.send(f'Привет, {author.mention}!')
