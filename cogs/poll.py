@@ -9,7 +9,7 @@ class Poll(commands.Cog):
     async def poll(self, ctx, *, question=None):
         if question is None:
             await ctx.message.delete()
-            await ctx.send("Пожалуйста, укажите ваше предложение!")
+            await ctx.send("Пожалуйста, укажите ваше предложение!", delete_after=5.0)
         else:
             pollEmbed = discord.Embed(title = "Новое предложение", description = f"{question}", color = 0x209af8)
             pollEmbed.add_field(
