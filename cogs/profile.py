@@ -21,15 +21,13 @@ class Profile(commands.Cog):
             embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             #embed.add_field(name = "Статус", value = user.status)
             embed.set_thumbnail(url=user.avatar_url)
-            await ctx.send(embed = embed)
-        if user.id != self.bot.user.id:
+        elif user.id != self.bot.user.id:
             embed = discord.Embed(title = f'Карточка {user.name}', description=f"Тег: <@{user.id}>", color = 0x209af8)
             embed.add_field(name = "Регистрация", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             #embed.add_field(name = "Статус", value = user.status)
             embed.set_thumbnail(url="https://media.discordapp.net/attachments/964614960325992478/982716016184410122/4c8de376-2ee8-4938-b3bb-38f51b823875-4.gif")
-            await ctx.send(embed = embed)
-        if user.id == self.bot.user.id:
+        else:
             if user.status == discord.Status.online:
                 status = "В сети"
             if user.status == discord.Status.offline:
@@ -48,7 +46,7 @@ class Profile(commands.Cog):
             embed.add_field(name = "Версия Python", value = platform.python_version())
             embed.add_field(name = "Приглашение", value = "[Тык](https://discord.com/oauth2/authorize?client_id=935560968778448947&scope=bot&permissions=8)")
             embed.set_thumbnail(url=user.avatar_url)
-            await ctx.send(embed = embed)
+        await ctx.send(embed = embed)
 
 def setup(bot):
     bot.add_cog(Profile(bot))
