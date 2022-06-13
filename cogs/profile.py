@@ -1,5 +1,8 @@
 import discord
 from discord.ext import commands
+import time
+import datetime
+from math import ceil
 
 class Profile(commands.Cog):
     def __init__(self, bot):
@@ -7,9 +10,9 @@ class Profile(commands.Cog):
 
     @commands.command()
     async def profile(self, ctx, user: discord.Member = None):
-        date_format = "%#d.%#m.%Y в %H:%M"
+        date_format = "%#d.%#m.%Y в %H:%M:%S"
         if user is None:
-            user = ctx.author
+            user = ctx.author        
         if user.id != self.bot.user.id:
             if user.status == discord.Status.online:
                 status = "В сети"
@@ -20,8 +23,8 @@ class Profile(commands.Cog):
             if user.status == discord.Status.dnd:
                 status = "Не беспокоить"
             embed = discord.Embed(title = f'Карточка {user.name}', description=f"Тег: <@{user.id}>", color = 0x209af8)
-            embed.add_field(name = "Регистрация", value = user.created_at.strftime(date_format))
-            embed.add_field(name = "На сервере с", value = user.joined_at.strftime(date_format))
+            embed.add_field(name = "Регистрация", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
+            embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             #embed.add_field(name = "Статус", value = user.status)
             embed.set_thumbnail(url=user.avatar_url)
             await ctx.send(embed = embed)
@@ -35,10 +38,10 @@ class Profile(commands.Cog):
             if user.status == discord.Status.dnd:
                 status = "Не беспокоить"
             embed = discord.Embed(title = f'Карточка {user.name}', description=f"Тег: <@{user.id}>", color = 0x209af8)
-            embed.add_field(name = "Владелец", value = f"<@390567552830406656>")
+            embed.add_field(name = "Владелец", value="<@390567552830406656>")
             embed.add_field(name = "Сервер бота", value = "Rebox Shit Force")
-            embed.add_field(name = "Создан", value = user.created_at.strftime(date_format))
-            embed.add_field(name = "На сервере с", value = user.joined_at.strftime(date_format))
+            embed.add_field(name = "Создан", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
+            embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             embed.add_field(name = "Статус", value = status)
             embed.add_field(name = "Приглашение", value = "[Тык](https://discord.com/oauth2/authorize?client_id=935560968778448947&scope=bot&permissions=8)")
             embed.set_thumbnail(url=user.avatar_url)
