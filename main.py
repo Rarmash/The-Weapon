@@ -40,7 +40,7 @@ async def on_message_delete(ctx):
         name = 'Канал',
         value = f'<#{ctx.channel.id}>'
     )
-    if (ctx.channel.id not in bannedChannels) and (ctx.author.id not in bannedUsers) and (str(ctx.content)[1:5] != 'poll')  and (not ctx.author.bot):
+    if (ctx.channel.id not in bannedChannels) and (ctx.author.id not in bannedUsers) and (str(ctx.content)[0] != '!')  and (not ctx.author.bot):
         await channel.send(embed = embed)
         
 @bot.event
@@ -65,7 +65,7 @@ async def on_message_edit(before, after):
         name = 'Канал',
         value = f'<#{before.channel.id}>'
     )
-    if (before.channel.id not in bannedChannels) and (before.author.id not in bannedUsers) and (str(before.content)[1:5] != 'poll')  and (not before.author.bot) and (before.content != after.content):
+    if (before.channel.id not in bannedChannels) and (before.author.id not in bannedUsers) and (str(before.content)[0] != '!')  and (not before.author.bot) and (before.content != after.content):
         await channel.send(embed = embed)
         
 @bot.command()
