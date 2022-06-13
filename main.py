@@ -17,11 +17,11 @@ bot = commands.Bot(command_prefix='!', case_insensitive=True, presences = True)
 @bot.event
 async def on_ready():
     print("------")
-    print("Bot is ready!")
-    print(f"Logged in as: {bot.user.name}")
-    print(f"Bot ID: {str(bot.user.id)}")
+    print("Бот запущен!")
+    print(f"Вошли как {bot.user.name}")
+    print(f"ID бота: {str(bot.user.id)}")
     for guild in bot.guilds:
-        print(f"Connected to server: {guild}")
+        print(f"Подключились к серверу: {guild}")
     print("------")
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="за этой установкой"))
 

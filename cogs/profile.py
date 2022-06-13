@@ -23,6 +23,7 @@ class Profile(commands.Cog):
         embed = discord.Embed(title = f'Карточка {user.name}', description=f"Тег: <@{user.id}>", color = 0x209af8)
         embed.add_field(name = "Регистрация", value = user.created_at.strftime(date_format))
         embed.add_field(name = "На сервере с", value = user.joined_at.strftime(date_format))
+        #embed.add_field(name="Наивысшая роль", value=user.top_role.mention)
         #embed.add_field(name = "Статус", value = user.status)
         embed.set_thumbnail(url=user.avatar_url)
         await ctx.send(embed = embed)
