@@ -3,7 +3,6 @@ from discord.ext import commands
 from options import admin_id as administrator
 import os
 from time import time
-
 class Service(commands.Cog):
 
     def __init__(self, bot):
@@ -11,7 +10,7 @@ class Service(commands.Cog):
     
     @commands.command()
     async def server(self, ctx, guild: discord.Guild = None):
-        guild = ctx.guild if not guild else guild
+        guild = guild or ctx.guild
         embed = discord.Embed(title=f"Информация о сервере {guild}", color = 0x209af8)
         embed.set_thumbnail(url=guild.icon_url)
         embed.add_field(name="Описание", value=guild.description)
@@ -45,6 +44,7 @@ class Service(commands.Cog):
     async def pateufeek(self, ctx):
         await ctx.message.delete()
         await ctx.send("https://media.discordapp.net/attachments/964614960325992478/982716016184410122/4c8de376-2ee8-4938-b3bb-38f51b823875-4.gif")
+
 
     @commands.command()
     async def hello(self, ctx):

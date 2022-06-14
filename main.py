@@ -6,6 +6,8 @@ from discord.ext import commands
 from bannedChannels import bannedChannels
 from bannedUsers import bannedUsers
 import os
+import json
+
 
 intents = discord.Intents.all()
 intents.presences = True
@@ -24,6 +26,22 @@ async def on_ready():
         print(f"Подключились к серверу: {guild}")
     print("------")
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="за этой установкой"))
+
+if not os.path.exists('data.json'):
+    with open('data.json', "w+") as newsave:
+        newsave.write("{}")
+messageCount = json.load(open('data.json', 'r'))
+
+@bot.event
+async def on_message(ctx):
+    author = str(ctx.author.id)
+    if author in messageCount:
+        messageCount[author] += 1
+    else:
+        messageCount[author] = 1
+    with open('data.json', 'w') as f:
+        json.dump(messageCount, f)
+    await bot.process_commands(ctx)
 
 @bot.event
 async def on_message_delete(ctx):
