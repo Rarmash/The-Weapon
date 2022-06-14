@@ -30,6 +30,10 @@ class Profile(commands.Cog):
         for users in json_data:
             if int(users) == user.id:
                 quantity = json_data[users]
+        try:
+            quantity
+        except:
+            quantity = 0
         if user.id != self.bot.user.id:
             embed = discord.Embed(title = f'Карточка {user.name}', description=f"<@{user.id}> — {status}", color = 0x209af8)
             embed.add_field(name = "Регистрация", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
