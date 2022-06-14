@@ -67,7 +67,7 @@ class Profile(commands.Cog):
         desk = ''
         kolvo = 0
         for users in json_data:
-            desk+=f'<@{users}>: {json_data[users]} сообщений\n'
+            desk+=f'<@{users}>: {json_data[users]}\n'
             kolvo+=json_data[users]
         embed = discord.Embed(title = 'Лидеры по сообщениям', description=desk, color = 0x209af8)
         #embed.set_thumbnail(url=guild.icon_url)
