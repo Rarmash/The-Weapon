@@ -58,6 +58,22 @@ class Profile(commands.Cog):
             embed.add_field(name = "Приглашение", value = "[Тык](https://discord.com/oauth2/authorize?client_id=935560968778448947&scope=bot&permissions=8)")
             embed.set_thumbnail(url=user.avatar_url)
         await ctx.send(embed = embed)
+        
+    @commands.command()
+    async def leaderboard(self, ctx, guild: discord.Guild = None):
+        guild = guild or ctx.guild
+        with open('data.json') as json_file:
+            json_data = json.load(json_file)
+        desk = ''
+        kolvo = 0
+        for users in json_data:
+            desk+=f'<@{users}>: {json_data[users]} сообщений\n'
+            kolvo+=json_data[users]
+        embed = discord.Embed(title = 'Лидеры по сообщениям', description=desk, color = 0x209af8)
+        #embed.set_thumbnail(url=guild.icon_url)
+        embed.set_footer(text=f"Всего отправлено {kolvo} сообщений")
+        if discord.utils.get(ctx.guild.roles, id=admin_role_id) in ctx.author.roles or discord.utils.get(ctx.guild.roles, id=insider_id) in ctx.author.roles:
+            await ctx.send(embed = embed)
 
 def setup(bot):
     bot.add_cog(Profile(bot))
