@@ -16,18 +16,17 @@ class Profile(commands.Cog):
         if user is None:
             user = ctx.author
         if user.status == discord.Status.online:
-            status = "🟢 В сети"
+            status = "🟢 в сети"
         if user.status == discord.Status.offline:
-            status = "⚪ Не в сети"
+            status = "⚪ не в сети"
         if user.status == discord.Status.idle:
-            status = "🌙 Не активен"
+            status = "🌙 не активен"
         if user.status == discord.Status.dnd:
-            status = "⛔ Не беспокоить"
+            status = "⛔ не беспокоить"
         if user.id != self.bot.user.id:
-            embed = discord.Embed(title = f'Карточка {user.name}', description=f"Тег: <@{user.id}>", color = 0x209af8)
+            embed = discord.Embed(title = f'Карточка {user.name}', description=f"Тег: <@{user.id}> — {status}", color = 0x209af8)
             embed.add_field(name = "Регистрация", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
-            embed.add_field(name = "Статус", value = status)
             if user.id == 415533286358777856:
                 embed.set_thumbnail(url="https://media.discordapp.net/attachments/964614960325992478/982716016184410122/4c8de376-2ee8-4938-b3bb-38f51b823875-4.gif")
             else:
