@@ -53,8 +53,7 @@ class MessagesCounter(commands.Cog):
         embed = discord.Embed(title = 'Лидеры по сообщениям', description=desk, color = 0x209af8)
         #embed.set_thumbnail(url=guild.icon_url)
         embed.set_footer(text=f"Всего отправлено {kolvo} сообщений")
-        if discord.utils.get(ctx.guild.roles, id=admin_role_id) in ctx.author.roles or discord.utils.get(ctx.guild.roles, id=insider_id) in ctx.author.roles:
-            await ctx.send(embed = embed)
+        await ctx.send(embed = embed)
 
 def setup(bot):
     bot.add_cog(MessagesCounter(bot))
