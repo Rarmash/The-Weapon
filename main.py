@@ -20,10 +20,9 @@ myclient = pymongo.MongoClient(mongodb_link)
 db = myclient["Messages"]
 Collection = db["Messages"]
 
-if not os.path.exists('data.json'):
-    for data in Collection.find({},{'_id': 0}):
-        with open('data.json', 'w+') as newsave:
-            newsave.write(str(data).replace("'", '"'))
+for data in Collection.find({},{'_id': 0}):
+    with open('data.json', 'w+') as newsave:
+        newsave.write(str(data).replace("'", '"'))
 
 myclient.close()
 
