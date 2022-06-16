@@ -6,13 +6,13 @@ import datetime
 from math import ceil
 import sys
 import platform
-from options import admin_role_id, insider_id
+from options import insider_id
 
 class Profile(commands.Cog):
     def __init__(self, bot):
         self.Bot = bot
 
-    @commands.slash_command()
+    @commands.slash_command(description='Посмотреть карточку профиля')
     async def profile(self, ctx: discord.ApplicationContext, user: discord.Member = None):
         date_format = "%#d.%#m.%Y в %H:%M:%S"
         if user is None:

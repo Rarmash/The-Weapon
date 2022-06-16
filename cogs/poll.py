@@ -5,7 +5,7 @@ class Poll(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.slash_command()
+    @commands.slash_command(description='Предложить идею')
     async def poll(self, ctx: discord.ApplicationContext, *, question):
         pollEmbed = discord.Embed(title = "Новое предложение", description = f"{question}", color = 0x209af8)
         pollEmbed.add_field(

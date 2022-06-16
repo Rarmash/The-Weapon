@@ -34,7 +34,7 @@ class MessagesCounter(commands.Cog):
             else:
                 Collection.insert_one(file_data)
 
-    @commands.slash_command()
+    @commands.slash_command(description='Посмотреть таблицу лидеров')
     async def leaderboard(self, ctx):
         with open('data.json', 'r') as file:
             leaderboard = json.load(file)

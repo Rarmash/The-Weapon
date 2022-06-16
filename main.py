@@ -1,7 +1,6 @@
 from options import token as discordToken
 from options import admin_id as administrator
 import discord
-from discord.ext import commands
 import os
 import pymongo
 from options import mongodb_link
