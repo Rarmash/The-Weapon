@@ -1,18 +1,15 @@
 from options import token as discordToken
-from options import log_channel as logger
 from options import admin_id as administrator
 import discord
 from discord.ext import commands
-from bannedChannels import bannedChannels
-from bannedUsers import bannedUsers
 import os
 import pymongo
 from options import mongodb_link
 
 intents = discord.Intents.all()
 intents.presences = True
-intents.members=True
-intents.messages=True
+intents.members = True
+intents.messages = True
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True, intents=intents)
 
@@ -20,11 +17,12 @@ myclient = pymongo.MongoClient(mongodb_link)
 db = myclient["Messages"]
 Collection = db["Messages"]
 
-for data in Collection.find({},{'_id': 0}):
+for data in Collection.find({}, {'_id': 0}):
     with open('data.json', 'w+') as newsave:
         newsave.write(str(data).replace("'", '"'))
 
 myclient.close()
+
 
 @bot.event
 async def on_ready():
@@ -37,52 +35,7 @@ async def on_ready():
     print("------")
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="за этой установкой"))
 
-@bot.event
-async def on_message_delete(ctx):
-    channel = bot.get_channel(logger)
-    embed = discord.Embed(
-        title = 'Удалённое сообщение',
-        description = ctx.content,
-        color = 0x209af8
-    )
-    embed.add_field(
-        name = 'Автор',
-        value = f'<@{ctx.author.id}>'
-    )
-    embed.add_field(
-        name = 'Канал',
-        value = f'<#{ctx.channel.id}>'
-    )
-    if (ctx.channel.id not in bannedChannels) and (ctx.author.id not in bannedUsers) and (str(ctx.content)[0] != '!')  and (not ctx.author.bot):
-        await channel.send(embed = embed)
-        
-@bot.event
-async def on_message_edit(before, after):
-    channel = bot.get_channel(logger)
-    embed = discord.Embed(
-        color = 0x209af8
-        )
-    embed.add_field(
-        name = "Редактированное сообщение",
-        value = after.content,
-        inline=False
-        )
-    embed.add_field(
-        name = "Оригинальное сообщение",
-        value = before.content,
-        inline=False
-        )
-    embed.add_field(
-        name = 'Автор',
-        value = f'<@{before.author.id}>'
-    )
-    embed.add_field(
-        name = 'Канал',
-        value = f'<#{before.channel.id}>'
-    )
-    if (before.channel.id not in bannedChannels) and (before.author.id not in bannedUsers) and (str(before.content)[0] != '!')  and (not before.author.bot) and (before.content != after.content):
-        await channel.send(embed = embed)
-        
+
 @bot.command()
 async def unload(ctx, extension):
     if ctx.author.id == administrator:
@@ -113,5 +66,5 @@ async def reload(ctx, extension):
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py") and filename != "__init__.py":
         bot.load_extension(f'cogs.{filename[:-3]}')
-    
+
 bot.run(discordToken)

@@ -1,7 +1,7 @@
 import json
 import discord
 from discord.ext import commands
-from options import admin_role_id, insider_id, mongodb_link
+from options import mongodb_link
 import pymongo
 
 myclient = pymongo.MongoClient(mongodb_link)
@@ -10,10 +10,11 @@ Collection = db["Messages"]
 
 messageCount = json.load(open('data.json', 'r'))
 
+
 class MessagesCounter(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-    
+
     @commands.Cog.listener()
     async def on_message(self, ctx):
         with open('data.json') as file:
@@ -29,10 +30,9 @@ class MessagesCounter(commands.Cog):
             json.dump(messageCount, update_file, indent=4)
             Collection.delete_many({})
             if isinstance(file_data, list):
-                Collection.insert_many(file_data)  
+                Collection.insert_many(file_data)
             else:
                 Collection.insert_one(file_data)
-                
 
     @commands.command()
     async def leaderboard(self, ctx, guild: discord.Guild = None):
@@ -48,12 +48,14 @@ class MessagesCounter(commands.Cog):
         desk = ''
         kolvo = 0
         for users in new_leaderboard:
-            desk+=f'<@{users[0]}>: {users[1]}\n'
-            kolvo+=int(users[1])
-        embed = discord.Embed(title = 'Лидеры по сообщениям', description=desk, color = 0x209af8)
-        #embed.set_thumbnail(url=guild.icon_url)
+            desk += f'<@{users[0]}>: {users[1]}\n'
+            kolvo += int(users[1])
+        embed = discord.Embed(title='Лидеры по сообщениям',
+                              description=desk, color=0x209af8)
+        # embed.set_thumbnail(url=guild.icon_url)
         embed.set_footer(text=f"Всего отправлено {kolvo} сообщений")
-        await ctx.send(embed = embed)
+        await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(MessagesCounter(bot))
