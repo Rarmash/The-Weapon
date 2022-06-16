@@ -11,7 +11,8 @@ intents.presences = True
 intents.members = True
 intents.messages = True
 
-bot = commands.Bot(command_prefix='!', case_insensitive=True, intents=intents)
+bot = discord.Bot(case_insensitive=True, intents=intents)
+client = discord.Client(command_prefix='!', case_insensitive=True, intents=intents)
 
 myclient = pymongo.MongoClient(mongodb_link)
 db = myclient["Messages"]
@@ -35,23 +36,22 @@ async def on_ready():
     print("------")
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="за этой установкой"))
 
-
 @bot.command()
 async def unload(ctx, extension):
     if ctx.author.id == administrator:
         bot.unload_extension(f"cogs.{extension}")
-        await ctx.send("Ког выгружается...")
+        await ctx.respond("Ког выгружается...")
     else:
-        await ctx.send("Недостаточно прав для выполнения данной команды.")
+        await ctx.respond("Недостаточно прав для выполнения данной команды.")
 
 
 @bot.command()
 async def load(ctx, extension):
     if ctx.author.id == administrator:
         bot.load_extension(f"cogs.{extension}")
-        await ctx.send("Ког запускается...")
+        await ctx.respond("Ког запускается...")
     else:
-        await ctx.send("Недостаточно прав для выполнения данной команды.")
+        await ctx.respond("Недостаточно прав для выполнения данной команды.")
 
 
 @bot.command()
@@ -62,7 +62,7 @@ async def reload(ctx, extension):
         await ctx.send("Ког перезапускается...")
     else:
         await ctx.send("Недостаточно прав для выполнения данной команды.")
-
+        
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py") and filename != "__init__.py":
         bot.load_extension(f'cogs.{filename[:-3]}')
