@@ -16,6 +16,10 @@ intents.messages=True
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True, intents=intents)
 
+if not os.path.exists('data.json'):
+    with open('data.json', "w+") as newsave:
+        newsave.write("{}")
+
 @bot.event
 async def on_ready():
     print("------")
@@ -26,22 +30,6 @@ async def on_ready():
         print(f"Подключились к серверу: {guild}")
     print("------")
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="за этой установкой"))
-
-if not os.path.exists('data.json'):
-    with open('data.json', "w+") as newsave:
-        newsave.write("{}")
-messageCount = json.load(open('data.json', 'r'))
-
-@bot.event
-async def on_message(ctx):
-    author = str(ctx.author.id)
-    if author in messageCount:
-        messageCount[author] += 1
-    else:
-        messageCount[author] = 1
-    with open('data.json', 'w') as f:
-        json.dump(messageCount, f)
-    await bot.process_commands(ctx)
 
 @bot.event
 async def on_message_delete(ctx):
