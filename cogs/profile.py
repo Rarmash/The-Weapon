@@ -29,7 +29,7 @@ class Profile(commands.Cog):
             json_data = json.load(json_file)
         for users in json_data:
             if int(users) == user.id:
-                quantity = json_data[users]
+                quantity = json_data[users]+1
         try:
             quantity
         except:
@@ -51,7 +51,7 @@ class Profile(commands.Cog):
             embed.add_field(name = "Сервер бота", value = "Rebox Shit Force")
             embed.add_field(name = "Создан", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
-            embed.add_field(name = "Сообщений", value = quantity+1)
+            embed.add_field(name = "Сообщений", value = quantity)
             embed.add_field(name = "Статус", value = status)
             embed.add_field(name = "ОС", value = sys.platform)
             embed.add_field(name = "Версия Python", value = platform.python_version())
