@@ -34,9 +34,8 @@ class MessagesCounter(commands.Cog):
             else:
                 Collection.insert_one(file_data)
 
-    @commands.command()
-    async def leaderboard(self, ctx, guild: discord.Guild = None):
-        guild = guild or ctx.guild
+    @commands.slash_command()
+    async def leaderboard(self, ctx):
         with open('data.json', 'r') as file:
             leaderboard = json.load(file)
         user_ids = list(leaderboard.keys())
@@ -54,7 +53,7 @@ class MessagesCounter(commands.Cog):
                               description=desk, color=0x209af8)
         # embed.set_thumbnail(url=guild.icon_url)
         embed.set_footer(text=f"Всего отправлено {kolvo} сообщений")
-        await ctx.send(embed=embed)
+        await ctx.respond(embed=embed)
 
 
 def setup(bot):
