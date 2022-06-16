@@ -11,7 +11,6 @@ intents.members = True
 intents.messages = True
 
 bot = discord.Bot(case_insensitive=True, intents=intents)
-client = discord.Client(command_prefix='!', case_insensitive=True, intents=intents)
 
 myclient = pymongo.MongoClient(mongodb_link)
 db = myclient["Messages"]
