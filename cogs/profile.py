@@ -38,7 +38,8 @@ class Profile(commands.Cog):
         except:
             quantity = 0
         if user.id != self.Bot.user.id:
-            embed = discord.Embed(title = f'Привет, я {user.name}', description=f"<@{user.id}> — {status}", color = 0x209af8)
+            time_out = '***(в таймауте)***' if user.timed_out and discord.utils.get(ctx.guild.roles, id=insider_id) in ctx.author.roles else ''
+            embed = discord.Embed(title = f'Привет, я {user.name}', description=f"<@{user.id}> — {status} {time_out}", color = 0x209af8)
             embed.add_field(name = "Регистрация", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             embed.add_field(name = "Сообщений", value = quantity+extra_quantity)
