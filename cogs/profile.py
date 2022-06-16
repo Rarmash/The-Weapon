@@ -35,7 +35,7 @@ class Profile(commands.Cog):
         except:
             quantity = 0
         if user.id != self.bot.user.id:
-            embed = discord.Embed(title = f'Карточка {user.name}', description=f"<@{user.id}> — {status}", color = 0x209af8)
+            embed = discord.Embed(title = f'Привет, я {user.name}', description=f"<@{user.id}> — {status}", color = 0x209af8)
             embed.add_field(name = "Регистрация", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             embed.add_field(name = "Сообщений", value = quantity)
@@ -46,7 +46,7 @@ class Profile(commands.Cog):
             else:
                 embed.set_thumbnail(url=user.avatar_url)
         if user.id == self.bot.user.id:
-            embed = discord.Embed(title = f'Карточка {user.name}', description=f"Тег: <@{user.id}>", color = 0x209af8)
+            embed = discord.Embed(title = f'Привет, я {user.name}', description=f"Тег: <@{user.id}>", color = 0x209af8)
             embed.add_field(name = "Владелец", value="<@390567552830406656>")
             embed.add_field(name = "Сервер бота", value = "Rebox Shit Force")
             embed.add_field(name = "Создан", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
