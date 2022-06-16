@@ -1,7 +1,12 @@
 import json
 import discord
 from discord.ext import commands
-from options import admin_role_id, insider_id
+from options import admin_role_id, insider_id, mongodb_link
+import pymongo
+
+myclient = pymongo.MongoClient(mongodb_link)
+db = myclient["Messages"]
+Collection = db["Messages"]
 
 messageCount = json.load(open('data.json', 'r'))
 
@@ -11,6 +16,8 @@ class MessagesCounter(commands.Cog):
     
     @commands.Cog.listener()
     async def on_message(self, ctx):
+        with open('data.json') as file:
+            file_data = json.load(file)
         with open('data.json', 'r') as file:
             messageCount = json.load(file)
             author = str(ctx.author.id)
@@ -20,6 +27,11 @@ class MessagesCounter(commands.Cog):
             messageCount[author] = 1
         with open('data.json', 'w') as update_file:
             json.dump(messageCount, update_file, indent=4)
+            Collection.delete_many({})
+            if isinstance(file_data, list):
+                Collection.insert_many(file_data)  
+            else:
+                Collection.insert_one(file_data)
                 
 
     @commands.command()
@@ -35,7 +47,6 @@ class MessagesCounter(commands.Cog):
         new_leaderboard.sort(key=lambda items: items[1], reverse=True)
         desk = ''
         kolvo = 0
-        print(type(new_leaderboard))
         for users in new_leaderboard:
             desk+=f'<@{users[0]}>: {users[1]}\n'
             kolvo+=int(users[1])

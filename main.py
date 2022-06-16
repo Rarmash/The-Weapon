@@ -6,8 +6,8 @@ from discord.ext import commands
 from bannedChannels import bannedChannels
 from bannedUsers import bannedUsers
 import os
-import json
-
+import pymongo
+from options import mongodb_link
 
 intents = discord.Intents.all()
 intents.presences = True
@@ -16,9 +16,16 @@ intents.messages=True
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True, intents=intents)
 
+myclient = pymongo.MongoClient(mongodb_link)
+db = myclient["Messages"]
+Collection = db["Messages"]
+
 if not os.path.exists('data.json'):
-    with open('data.json', "w+") as newsave:
-        newsave.write("{}")
+    for data in Collection.find({},{'_id': 0}):
+        with open('data.json', 'w+') as newsave:
+            newsave.write(str(data).replace("'", '"'))
+
+myclient.close()
 
 @bot.event
 async def on_ready():
