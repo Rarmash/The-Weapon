@@ -39,7 +39,7 @@ class Profile(commands.Cog):
             embed.add_field(name = "Регистрация", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             embed.add_field(name = "Сообщений", value = quantity)
-            if discord.utils.get(ctx.guild.roles, id=admin_role_id) in user.roles or discord.utils.get(ctx.guild.roles, id=insider_id) in user.roles:
+            if discord.utils.get(ctx.guild.roles, id=insider_id) in user.roles:
                 embed.set_footer(text="Принимает участие в тестировании и помогает серверу стать лучше")
             if user.id == 415533286358777856:
                 embed.set_thumbnail(url="https://media.discordapp.net/attachments/964614960325992478/982716016184410122/4c8de376-2ee8-4938-b3bb-38f51b823875-4.gif")
