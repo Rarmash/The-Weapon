@@ -17,9 +17,6 @@ class Profile(commands.Cog):
         date_format = "%#d.%#m.%Y в %H:%M:%S"
         if user is None:
             user = ctx.author
-            extra_quantity = 1
-        else:
-            extra_quantity = 0
         if user.status == discord.Status.online:
             status = "🟢 в сети"
         if user.status == discord.Status.offline:
@@ -42,7 +39,7 @@ class Profile(commands.Cog):
             embed = discord.Embed(title = f'Привет, я {user.name}', description=f"<@{user.id}> — {status} {time_out}", color = 0x209af8)
             embed.add_field(name = "Регистрация", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
-            embed.add_field(name = "Сообщений", value = quantity+extra_quantity)
+            embed.add_field(name = "Сообщений", value = quantity)
             if discord.utils.get(ctx.guild.roles, id=insider_id) in user.roles:
                 embed.set_footer(text="Принимает участие в тестировании и помогает серверу стать лучше")
             if user.id == 415533286358777856:
@@ -55,7 +52,7 @@ class Profile(commands.Cog):
             embed.add_field(name = "Сервер бота", value = "Rebox Shit Force")
             embed.add_field(name = "Создан", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
-            embed.add_field(name = "Сообщений", value = quantity+extra_quantity)
+            embed.add_field(name = "Сообщений", value = quantity+1)
             embed.add_field(name = "Статус", value = status)
             embed.add_field(name = "ОС", value = sys.platform)
             embed.add_field(name = "Версия Python", value = platform.python_version())
