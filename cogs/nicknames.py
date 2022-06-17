@@ -3,7 +3,7 @@ from discord.ext import commands
 from options import insider_id
 
 symbols = ['ٴ']
-PLACEHOLDER_NICKNAME = 'Смените никнейм (правило 7).'
+PLACEHOLDER_NICKNAME = 'По правилу 7 я пидор'
 
 class Nicknames(commands.Cog):
     def __init__(self, bot):
