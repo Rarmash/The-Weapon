@@ -3,7 +3,16 @@ from discord.ext import commands
 from bannedChannels import bannedChannels
 from bannedUsers import bannedUsers
 from options import log_channel as logger
+from options import mongodb_link
+import pymongo
+import json
 
+
+myclient = pymongo.MongoClient(mongodb_link)
+db = myclient["Messages"]
+Collection = db["Messages"]
+
+messageCount = json.load(open('data.json', 'r'))
 
 class Logger(commands.Cog):
     def __init__(self, bot):
@@ -27,6 +36,19 @@ class Logger(commands.Cog):
         )
         if (ctx.channel.id not in bannedChannels) and (ctx.author.id not in bannedUsers) and (str(ctx.content)[0] != '!') and (not ctx.author.bot):
             await channel.send(embed=embed)
+        with open('data.json') as file:
+            file_data = json.load(file)
+        with open('data.json', 'r') as file:
+            messageCount = json.load(file)
+            author = str(ctx.author.id)
+        messageCount[author] -= 1
+        with open('data.json', 'w') as update_file:
+            json.dump(messageCount, update_file, indent=4)
+            Collection.delete_many({})
+            if isinstance(file_data, list):
+                Collection.insert_many(file_data)
+            else:
+                Collection.insert_one(file_data)
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
