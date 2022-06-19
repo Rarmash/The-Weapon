@@ -40,7 +40,7 @@ cogs = bot.create_group("service", "Сервисные команды")
 async def unload(ctx, extension):
     if ctx.author.id == administrator:
         bot.unload_extension(f"cogs.{extension}")
-        await ctx.respond("Ког выгружается...")
+        await ctx.respond(f"**cogs.{extension}** выгружается...")
     else:
         await ctx.respond("Недостаточно прав для выполнения данной команды.")
 
@@ -49,7 +49,7 @@ async def unload(ctx, extension):
 async def load(ctx, extension):
     if ctx.author.id == administrator:
         bot.load_extension(f"cogs.{extension}")
-        await ctx.respond("Ког запускается...")
+        await ctx.respond(f"**cogs.{extension}** запускается...")
     else:
         await ctx.respond("Недостаточно прав для выполнения данной команды.")
 
@@ -59,7 +59,7 @@ async def reload(ctx, extension):
     if ctx.author.id == administrator:
         bot.unload_extension(f"cogs.{extension}")
         bot.load_extension(f"cogs.{extension}")
-        await ctx.respond("Ког перезапускается...")
+        await ctx.respond(f"**cogs.{extension}** перезапускается...")
     else:
         await ctx.respond("Недостаточно прав для выполнения данной команды.")
         
