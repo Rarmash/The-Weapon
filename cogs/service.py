@@ -37,6 +37,7 @@ class Service(commands.Cog):
         await ctx.respond(embed=embed)
     
     @commands.slash_command(description='Pat Eufeek')
+    @commands.cooldown(1, 60, commands.BucketType.user)
     async def pateufeek(self, ctx):
         await ctx.respond("https://media.discordapp.net/attachments/964614960325992478/982716016184410122/4c8de376-2ee8-4938-b3bb-38f51b823875-4.gif")
 
