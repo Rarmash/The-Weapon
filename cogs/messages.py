@@ -22,17 +22,18 @@ class MessagesCounter(commands.Cog):
         with open('data.json', 'r') as file:
             messageCount = json.load(file)
             author = str(ctx.author.id)
-        if author in messageCount:
-            messageCount[author] += 1
-        else:
-            messageCount[author] = 1
-        with open('data.json', 'w') as update_file:
-            json.dump(messageCount, update_file, indent=4)
-            Collection.delete_many({})
-            if isinstance(file_data, list):
-                Collection.insert_many(file_data)
+        if not ctx.author.bot:
+            if author in messageCount:
+                messageCount[author] += 1
             else:
-                Collection.insert_one(file_data)
+                messageCount[author] = 1
+            with open('data.json', 'w') as update_file:
+                json.dump(messageCount, update_file, indent=4)
+                Collection.delete_many({})
+                if isinstance(file_data, list):
+                    Collection.insert_many(file_data)
+                else:
+                    Collection.insert_one(file_data)
 
     @commands.slash_command(description='Посмотреть таблицу лидеров')
     async def leaderboard(self, ctx):
@@ -54,6 +55,10 @@ class MessagesCounter(commands.Cog):
         # embed.set_thumbnail(url=guild.icon_url)
         embed.set_footer(text=f"Всего отправлено {kolvo} сообщений")
         await ctx.respond(embed=embed)
+        
+    #@commands.Cog.listener()
+    #async def on_member_leave(self, ctx):
+        
 
 
 def setup(bot):
