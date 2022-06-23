@@ -30,8 +30,6 @@ async def on_ready():
     print(f"Вошли как {bot.user.name}")
     print(f"ID бота: {str(bot.user.id)}")
     for guild in bot.guilds:
-        my_server = bot.get_server('982338827580485632')
-        await bot.leave_server(my_server)
         print(f"Подключились к серверу: {guild}")
     print("------")
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="за этой установкой"))
