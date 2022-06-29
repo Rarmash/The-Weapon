@@ -1,7 +1,7 @@
 import json
 import discord
 from discord.ext import commands
-from options import mongodb_link
+from options import mongodb_link, admin_channel
 import pymongo
 
 myclient = pymongo.MongoClient(mongodb_link)
@@ -56,9 +56,29 @@ class MessagesCounter(commands.Cog):
         embed.set_footer(text=f"Всего отправлено {kolvo} сообщений")
         await ctx.respond(embed=embed)
         
-    #@commands.Cog.listener()
-    #async def on_member_leave(self, ctx):
-        
+    @commands.Cog.listener()
+    async def on_member_remove(self, member):
+        with open('data.json') as file:
+            file_data = json.load(file)
+        with open('data.json', 'r') as file:
+            messageCount = json.load(file)
+            author = str(member.id)
+        if not member.bot:
+            if author in messageCount:
+                del messageCount[author]
+            with open('data.json', 'w') as update_file:
+                json.dump(messageCount, update_file, indent=4)
+                Collection.delete_many({})
+                if isinstance(file_data, list):
+                    Collection.insert_many(file_data)
+                else:
+                    Collection.insert_one(file_data)
+        channel = self.bot.get_channel(admin_channel)
+        embed = discord.Embed(
+            description=f'<@{author}> вышел с сервера.',
+            color=0x209af8
+        )
+        await channel.send(embed=embed)
 
 
 def setup(bot):
