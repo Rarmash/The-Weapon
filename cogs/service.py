@@ -47,6 +47,10 @@ class Service(commands.Cog):
         author = ctx.author
         await ctx.respond(f'Привет, {author.mention}!')
         
+    @commands.slash_command(description='Сказать сообщение')
+    async def say(self, ctx, msg):
+        await ctx.send(msg)
+        
     @commands.slash_command(description='Выключить бота')
     async def shutdown(self, ctx):
         if ctx.author.id == administrator:
