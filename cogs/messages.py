@@ -22,7 +22,7 @@ class MessagesCounter(commands.Cog):
         with open('data.json', 'r') as file:
             messageCount = json.load(file)
             author = str(ctx.author.id)
-        if not ctx.author.bot and ctx.channel.id != 940736668661600326:
+        if not ctx.author.bot and ctx.channel.id != 940736668661600326 and ctx.author.id != 398913828781424661:
             if author in messageCount:
                 messageCount[author] += 1
             else:
