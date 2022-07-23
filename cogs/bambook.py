@@ -13,7 +13,7 @@ class Bambook(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, ctx):
-        bmbk = 472075843850731520
+        bmbk = 398913828781424661
         bmbklog = 1000535903128780860
         channel = self.bot.get_channel(bmbklog)
         if ctx.author.id == bmbk:
