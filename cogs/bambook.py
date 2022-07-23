@@ -36,7 +36,12 @@ class Bambook(commands.Cog):
 
     @commands.Cog.listener()
     async def on_user_update(self, memberBefore, memberAfter):
-        if memberAfter.id == bmbk:
+        if memberAfter.author.id == bmbk:
+            await memberAfter.edit(nick='оп')
+            
+    @commands.Cog.listener()
+    async def on_member_update(self, memberBefore, memberAfter):
+        if memberAfter.author.id == bmbk:
             await memberAfter.edit(nick='оп')
 
 def setup(bot):
