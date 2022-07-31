@@ -75,7 +75,7 @@ class MessagesCounter(commands.Cog):
                     Collection.insert_one(file_data)
         channel = self.bot.get_channel(admin_channel)
         embed = discord.Embed(
-            description=f'<@{author}> вышел с сервера.',
+            description=f'<@{author}> ({member.display_name}) вышел с сервера.',
             color=0x209af8
         )
         await channel.send(embed=embed)
