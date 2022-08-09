@@ -4,6 +4,7 @@ import discord
 import os
 import pymongo
 from options import mongodb_link
+import os.path
 
 intents = discord.Intents.all()
 intents.presences = True
@@ -15,6 +16,9 @@ bot = discord.Bot(case_insensitive=True, intents=intents)
 myclient = pymongo.MongoClient(mongodb_link)
 db = myclient["Messages"]
 Collection = db["Messages"]
+
+if os.path.exists('data.json'):
+    os.remove('data.json')
 
 for data in Collection.find({}, {'_id': 0}):
     with open('data.json', 'w+') as newsave:
