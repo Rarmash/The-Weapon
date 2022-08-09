@@ -31,27 +31,10 @@ class Service(commands.Cog):
     async def ping(self, ctx):
         await ctx.respond(f"Понг! :ping_pong: Задержка: {self.bot.latency*1000:,.0f} ms.")
     
-    @commands.slash_command(description='Посмотреть аватарку')
-    async def avatar(self, ctx):
-        author = ctx.author
-        
-        embed = discord.Embed(title=f"Аватарка {author}"[:-5],
-                                color=discord.Color.dark_gray())
-        link = author.avatar
-        embed.set_image(url = link)
-
-        await ctx.respond(embed=embed)
-    
     @commands.slash_command(description='Pat Eufeek')
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def pateufeek(self, ctx):
         await ctx.respond("https://media.discordapp.net/attachments/964614960325992478/982716016184410122/4c8de376-2ee8-4938-b3bb-38f51b823875-4.gif")
-
-
-    @commands.slash_command(description='И тебе привет')
-    async def hello(self, ctx):
-        author = ctx.author
-        await ctx.respond(f'Привет, {author.mention}!')
         
     @commands.slash_command(description='Сказать сообщение')
     async def say(self, ctx, msg):
