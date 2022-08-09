@@ -60,7 +60,7 @@ class Service(commands.Cog):
     async def botsecret(self, ctx):
         if ctx.author.id == administrator:
             await ctx.respond("Скинул в ЛС.")
-            await ctx.author.send(f'Токен бота: `{token}`\nБаза MongoDB: `{mongodb_link}`', file=discord.File('.env'))
+            await ctx.author.send(f'Токен бота: `{token}`\nБаза MongoDB: `{mongodb_link}`')
         else:
             await ctx.respond("Недостаточно прав для выполнения данной команды.")   
         
