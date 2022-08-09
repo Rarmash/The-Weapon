@@ -3,9 +3,6 @@ import discord
 from discord.ext import commands
 from options import mongodb_link, admin_channel
 import pymongo
-from math import ceil
-import time
-import datetime
 
 myclient = pymongo.MongoClient(mongodb_link)
 db = myclient["Messages"]
@@ -77,10 +74,8 @@ class MessagesCounter(commands.Cog):
                 else:
                     Collection.insert_one(file_data)
         channel = self.bot.get_channel(admin_channel)
-        date_format = "%#d.%#m.%Y в %H:%M:%S"
-        user = member.author
         embed = discord.Embed(
-            description=f"<@{author}> ({member.display_name}) вышел с сервера.\nБыл на сервере с <t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>",
+            description=f'<@{author}> ({member.display_name}) вышел с сервера.',
             color=0x209af8
         )
         await channel.send(embed=embed)
