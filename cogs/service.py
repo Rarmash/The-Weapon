@@ -3,6 +3,9 @@ from discord.ext import commands
 from options import admin_id as administrator
 import os
 from options import token, mongodb_link
+import time
+import datetime
+from math import ceil
 class Service(commands.Cog):
 
     def __init__(self, bot):
@@ -11,15 +14,17 @@ class Service(commands.Cog):
     @commands.slash_command(description='Посмотреть карточку сервера')
     async def server(self, ctx):
         guild = ctx.guild
+        date_format = "%#d.%#m.%Y в %H:%M:%S"
         embed = discord.Embed(title=f"Информация о сервере {guild}", color = 0x209af8)
         embed.set_thumbnail(url=guild.icon)
         embed.add_field(name="Описание", value=guild.description)
         embed.add_field(name="Каналов", value=len(guild.channels))
         embed.add_field(name="Ролей", value=len(guild.roles))
         embed.add_field(name="Бустеров", value=len(guild.premium_subscribers))
-        embed.add_field(name="Участников", value=guild.member_count)
-        embed.add_field(name="Создан", value=str(guild.created_at)[:-7])
-        embed.add_field(name="Владелец", value=guild.owner)
+        embed.add_field(name="Участников", value=guild.member_count-len(([member for member in ctx.guild.members if member.bot])))
+        embed.add_field(name="Ботов", value=len(([member for member in ctx.guild.members if member.bot])))
+        embed.add_field(name="Создан", value=f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(guild.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
+        embed.add_field(name="Владелец", value=f"<@{guild.owner.id}>")
         await ctx.respond(embed=embed)   
     
     @commands.slash_command(description='Проверить пинг')
@@ -63,7 +68,7 @@ class Service(commands.Cog):
             await ctx.author.send(f'Токен бота: `{token}`\nБаза MongoDB: `{mongodb_link}`')
         else:
             await ctx.respond("Недостаточно прав для выполнения данной команды.")   
-        
+
     @commands.slash_command(description='Выключить бота')
     async def shutdown(self, ctx):
         if ctx.author.id == administrator:
