@@ -41,7 +41,8 @@ class Logger(commands.Cog):
         with open('data.json', 'r') as file:
             messageCount = json.load(file)
             author = str(ctx.author.id)
-        messageCount[author] -= 1
+        if not ctx.author.bot:
+            messageCount[author] -= 1
         with open('data.json', 'w') as update_file:
             json.dump(messageCount, update_file, indent=4)
             Collection.delete_many({})
