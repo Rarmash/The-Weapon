@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
-from bannedChannels import bannedChannels
-from bannedUsers import bannedUsers
+from ignoreList import bannedChannels, bannedUsers
 from options import mongodb_link, datapath, log_channel
 import pymongo
 import json
