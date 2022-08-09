@@ -1,18 +1,15 @@
 import discord
 from discord.ext import commands
-from bannedChannels import bannedChannels
-from bannedUsers import bannedUsers
-from options import log_channel as logger
-from options import mongodb_link
+from ignoreList import bannedChannels, bannedUsers
+from options import mongodb_link, datapath, log_channel
 import pymongo
 import json
-
 
 myclient = pymongo.MongoClient(mongodb_link)
 db = myclient["Messages"]
 Collection = db["Messages"]
 
-messageCount = json.load(open('data.json', 'r'))
+messageCount = json.load(open(datapath, 'r'))
 
 class Logger(commands.Cog):
     def __init__(self, bot):
@@ -20,7 +17,7 @@ class Logger(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_delete(self, ctx):
-        channel = self.bot.get_channel(logger)
+        channel = self.bot.get_channel(log_channel)
         embed = discord.Embed(
             title='Удалённое сообщение',
             description=ctx.content,
@@ -36,14 +33,14 @@ class Logger(commands.Cog):
         )
         if (ctx.channel.id not in bannedChannels) and (ctx.author.id not in bannedUsers) and (not ctx.author.bot):
             await channel.send(embed=embed)
-        with open('data.json') as file:
+        with open(datapath) as file:
             file_data = json.load(file)
-        with open('data.json', 'r') as file:
+        with open(datapath, 'r') as file:
             messageCount = json.load(file)
             author = str(ctx.author.id)
         if not ctx.author.bot:
             messageCount[author] -= 1
-        with open('data.json', 'w') as update_file:
+        with open(datapath, 'w') as update_file:
             json.dump(messageCount, update_file, indent=4)
             Collection.delete_many({})
             if isinstance(file_data, list):
@@ -53,7 +50,7 @@ class Logger(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
-        channel = self.bot.get_channel(logger)
+        channel = self.bot.get_channel(log_channel)
         embed = discord.Embed(
             color=0x209af8
         )

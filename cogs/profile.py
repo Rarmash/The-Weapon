@@ -6,7 +6,7 @@ import datetime
 from math import ceil
 import sys
 import platform
-from options import insider_id
+from options import insider_id, datapath
 
 class Profile(commands.Cog):
     def __init__(self, bot):
@@ -25,7 +25,7 @@ class Profile(commands.Cog):
             status = "🌙 не активен"
         if user.status == discord.Status.dnd:
             status = "⛔ не беспокоить"
-        with open('data.json') as json_file:
+        with open(datapath) as json_file:
             json_data = json.load(json_file)
         for users in json_data:
             if int(users) == user.id:

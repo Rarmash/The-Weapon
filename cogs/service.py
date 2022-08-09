@@ -1,8 +1,8 @@
 import discord
 from discord.ext import commands
-from options import admin_id as administrator
+from options import admin_id
 import os
-from options import token, mongodb_link
+from options import token, mongodb_link, datapath
 import time
 import datetime
 from math import ceil
@@ -42,11 +42,11 @@ class Service(commands.Cog):
         
     @commands.slash_command(description='Отправить JSON всех участников')
     async def jsondump(self, ctx):
-        await ctx.respond('Дамп JSON файла всех участников.', file=discord.File('data.json'))
+        await ctx.respond('Дамп JSON файла всех участников.', file=discord.File(datapath))
         
     @commands.slash_command(description='Отправить инфу по боту')
     async def botsecret(self, ctx):
-        if ctx.author.id == administrator:
+        if ctx.author.id == admin_id:
             await ctx.respond("Скинул в ЛС.")
             await ctx.author.send(f'Токен бота: `{token}`\nБаза MongoDB: `{mongodb_link}`')
         else:
@@ -54,7 +54,7 @@ class Service(commands.Cog):
 
     @commands.slash_command(description='Выключить бота')
     async def shutdown(self, ctx):
-        if ctx.author.id == administrator:
+        if ctx.author.id == admin_id:
             await ctx.respond("Завершение работы... :wave:")
             os.abort()
         else:

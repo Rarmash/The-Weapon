@@ -1,9 +1,8 @@
-from options import token as discordToken
-from options import admin_id as administrator
 import discord
 import os
 import pymongo
-from options import mongodb_link
+from options import token, admin_id, mongodb_link, datapath
+import os.path
 
 intents = discord.Intents.all()
 intents.presences = True
@@ -16,8 +15,11 @@ myclient = pymongo.MongoClient(mongodb_link)
 db = myclient["Messages"]
 Collection = db["Messages"]
 
+if os.path.exists(datapath):
+    os.remove(datapath)
+
 for data in Collection.find({}, {'_id': 0}):
-    with open('data.json', 'w+') as newsave:
+    with open(datapath, 'w+') as newsave:
         newsave.write(str(data).replace("'", '"'))
 
 myclient.close()
@@ -37,7 +39,7 @@ cogs = bot.create_group("service", "Сервисные команды")
 
 @cogs.command()
 async def unload(ctx, extension):
-    if ctx.author.id == administrator:
+    if ctx.author.id == admin_id:
         bot.unload_extension(f"cogs.{extension}")
         await ctx.respond(f"**cogs.{extension}** выгружается...")
     else:
@@ -45,7 +47,7 @@ async def unload(ctx, extension):
 
 @cogs.command()
 async def load(ctx, extension):
-    if ctx.author.id == administrator:
+    if ctx.author.id == admin_id:
         bot.load_extension(f"cogs.{extension}")
         await ctx.respond(f"**cogs.{extension}** запускается...")
     else:
@@ -53,7 +55,7 @@ async def load(ctx, extension):
 
 @cogs.command()
 async def reload(ctx, extension):
-    if ctx.author.id == administrator:
+    if ctx.author.id == admin_id:
         bot.unload_extension(f"cogs.{extension}")
         bot.load_extension(f"cogs.{extension}")
         await ctx.respond(f"**cogs.{extension}** перезапускается...")
@@ -64,4 +66,4 @@ for filename in os.listdir("./cogs"):
     if filename.endswith(".py") and filename != "__init__.py":
         bot.load_extension(f'cogs.{filename[:-3]}')
 
-bot.run(discordToken)
+bot.run(token)
