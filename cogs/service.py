@@ -2,13 +2,14 @@ import discord
 from discord.ext import commands
 from options import admin_id as administrator
 import os
+from options import token, mongodb_link
 class Service(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
     
     @commands.slash_command(description='Посмотреть карточку сервера')
-    async def server(self, ctx, guild=None):
+    async def server(self, ctx):
         guild = ctx.guild
         embed = discord.Embed(title=f"Информация о сервере {guild}", color = 0x209af8)
         embed.set_thumbnail(url=guild.icon)
@@ -50,6 +51,18 @@ class Service(commands.Cog):
     @commands.slash_command(description='Сказать сообщение')
     async def say(self, ctx, msg):
         await ctx.send(msg)
+        
+    @commands.slash_command(description='Отправить JSON всех участников')
+    async def jsondump(self, ctx):
+        await ctx.respond('Дамп JSON файла всех участников.', file=discord.File('data.json'))
+        
+    @commands.slash_command(description='Отправить инфу по боту')
+    async def botsecret(self, ctx):
+        if ctx.author.id == administrator:
+            await ctx.respond("Скинул в ЛС.")
+            await ctx.author.send(f'Токен бота: `{token}`\nБаза MongoDB: `{mongodb_link}`')
+        else:
+            await ctx.respond("Недостаточно прав для выполнения данной команды.")   
         
     @commands.slash_command(description='Выключить бота')
     async def shutdown(self, ctx):
