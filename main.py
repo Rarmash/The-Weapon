@@ -22,7 +22,6 @@ for data in Collection.find({}, {'_id': 0}):
 
 myclient.close()
 
-
 @bot.event
 async def on_ready():
     print("------")
@@ -44,7 +43,6 @@ async def unload(ctx, extension):
     else:
         await ctx.respond("Недостаточно прав для выполнения данной команды.")
 
-
 @cogs.command()
 async def load(ctx, extension):
     if ctx.author.id == administrator:
@@ -52,7 +50,6 @@ async def load(ctx, extension):
         await ctx.respond(f"**cogs.{extension}** запускается...")
     else:
         await ctx.respond("Недостаточно прав для выполнения данной команды.")
-
 
 @cogs.command()
 async def reload(ctx, extension):
