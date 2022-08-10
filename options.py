@@ -12,5 +12,6 @@ mongodb_link = os.environ["MONGODB"]
 log_channel = 952519133117960192
 admin_channel = 647756597904408617
 admin_id = 390567552830406656
+mod_role_id = 646327704450236416
 insider_id = 986290766848602265
 admin_role_id = 646327510161686528
