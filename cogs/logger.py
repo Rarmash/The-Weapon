@@ -4,6 +4,7 @@ from ignoreList import bannedChannels, bannedUsers
 from options import mongodb_link, datapath, log_channel, accent_color
 import pymongo
 import json
+import io
 
 myclient = pymongo.MongoClient(mongodb_link)
 Collection = myclient["Messages"]["Messages"]
@@ -31,7 +32,13 @@ class Logger(commands.Cog):
             value=f'<#{ctx.channel.id}>'
         )
         if (ctx.channel.id not in bannedChannels) and (ctx.author.id not in bannedUsers) and (not ctx.author.bot):
-            await channel.send(embed=embed)
+            for attach in ctx.attachments:
+                imgn = attach.filename
+                img = io.BytesIO(await attach.read())
+            try:
+                await channel.send(file = discord.File(img, imgn), embed=embed)
+            except UnboundLocalError:
+                await channel.send(embed=embed)
         with open(datapath) as file:
             file_data = json.load(file)
         with open(datapath, 'r') as file:
