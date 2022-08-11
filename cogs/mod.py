@@ -1,12 +1,15 @@
 import discord
 from discord.ext import commands
+from discord.commands import SlashCommandGroup
 from options import accent_color
 
 class Mod(commands.Cog):
     def __init__(self, client):
         self.client = client
     
-    @commands.slash_command(description='Забанить аутягу')
+    mod = SlashCommandGroup("mod", "Команды модерации")
+    
+    @mod.command(description='Забанить аутягу')
     async def ban(self, ctx, member: discord.Member, *, reason = None):
         await member.ban(reason = reason)
         embed = discord.Embed(
@@ -15,7 +18,7 @@ class Mod(commands.Cog):
         )
         await ctx.respond(embed=embed)
     
-    @commands.slash_command(description='Кикнуть аутягу')
+    @mod.command(description='Кикнуть аутягу')
     async def kick(self, ctx, member: discord.Member, *, reason = None):
         await member.kick(reason = reason)
         embed = discord.Embed(
