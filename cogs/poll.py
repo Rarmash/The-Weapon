@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from options import poll_channel
 
 class Poll(commands.Cog):
     def __init__(self, bot):
@@ -7,7 +8,7 @@ class Poll(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
-        if payload.channel_id == 931963318262968412:
+        if payload.channel_id == poll_channel:
             channel = await self.Bot.fetch_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
 
