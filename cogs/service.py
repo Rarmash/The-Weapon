@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord.commands import SlashCommandGroup
 from options import admin_id
 import os
 from options import token, mongodb_link, datapath
@@ -10,6 +11,8 @@ class Service(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+    
+    service = SlashCommandGroup("service", "Сервисные команды")
     
     @commands.slash_command(description='Посмотреть карточку сервера')
     async def server(self, ctx):
@@ -27,7 +30,7 @@ class Service(commands.Cog):
         embed.add_field(name="Владелец", value=f"<@{guild.owner.id}>")
         await ctx.respond(embed=embed)   
     
-    @commands.slash_command(description='Проверить пинг')
+    @service.command(description='Проверить пинг')
     async def ping(self, ctx):
         await ctx.respond(f"Понг! :ping_pong: Задержка: {self.bot.latency*1000:,.0f} ms.")
     
@@ -36,15 +39,11 @@ class Service(commands.Cog):
     async def pateufeek(self, ctx):
         await ctx.respond("https://media.discordapp.net/attachments/964614960325992478/982716016184410122/4c8de376-2ee8-4938-b3bb-38f51b823875-4.gif")
         
-    @commands.slash_command(description='Сказать сообщение')
-    async def say(self, ctx, msg):
-        await ctx.send(msg)
-        
-    @commands.slash_command(description='Отправить JSON всех участников')
+    @service.command(description='Отправить JSON всех участников')
     async def jsondump(self, ctx):
         await ctx.respond('Дамп JSON файла всех участников.', file=discord.File(datapath))
         
-    @commands.slash_command(description='Отправить инфу по боту')
+    @service.command(description='Отправить инфу по боту')
     async def botsecret(self, ctx):
         if ctx.author.id == admin_id:
             await ctx.respond("Скинул в ЛС.")
@@ -52,7 +51,7 @@ class Service(commands.Cog):
         else:
             await ctx.respond("Недостаточно прав для выполнения данной команды.")   
 
-    @commands.slash_command(description='Выключить бота')
+    @service.command(description='Выключить бота')
     async def shutdown(self, ctx):
         if ctx.author.id == admin_id:
             await ctx.respond("Завершение работы... :wave:")
