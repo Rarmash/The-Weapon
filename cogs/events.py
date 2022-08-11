@@ -1,6 +1,4 @@
-import discord
 from discord.ext import commands
-from options import accent_color
 
 class Events(commands.Cog):
 
