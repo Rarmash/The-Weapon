@@ -5,8 +5,7 @@ from options import mongodb_link, admin_channel, datapath, accent_color
 import pymongo
 
 myclient = pymongo.MongoClient(mongodb_link)
-db = myclient["Messages"]
-Collection = db["Messages"]
+Collection = myclient["Messages"]["Messages"]
 
 messageCount = json.load(open(datapath, 'r'))
 

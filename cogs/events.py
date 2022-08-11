@@ -1,18 +1,11 @@
 import discord
 from discord.ext import commands
-
+from options import accent_color
 
 class Events(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-    
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx: commands.Context, error: commands.CommandError):
-        if isinstance(error, commands.MemberNotFound):
-            await ctx.message.delete()
-            embed = discord.Embed(description="❌ Пользователь не найден", color = 0xff0000)
-            await ctx.respond(embed=embed, delete_after=5.0)
 
     @commands.Cog.listener()
     async def on_application_command_error(self, ctx, error):

@@ -6,8 +6,7 @@ import pymongo
 import json
 
 myclient = pymongo.MongoClient(mongodb_link)
-db = myclient["Messages"]
-Collection = db["Messages"]
+Collection = myclient["Messages"]["Messages"]
 
 messageCount = json.load(open(datapath, 'r'))
 

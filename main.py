@@ -12,8 +12,7 @@ intents.messages = True
 bot = discord.Bot(case_insensitive=True, intents=intents)
 
 myclient = pymongo.MongoClient(mongodb_link)
-db = myclient["Messages"]
-Collection = db["Messages"]
+Collection = myclient["Messages"]["Messages"]
 
 if os.path.exists(datapath):
     os.remove(datapath)
