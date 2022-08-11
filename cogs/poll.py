@@ -7,7 +7,7 @@ class Poll(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
-        if payload.channel_id == 1007331086164049980:
+        if payload.channel_id == 931963318262968412:
             channel = await self.Bot.fetch_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
 
