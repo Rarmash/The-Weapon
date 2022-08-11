@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from options import poll_channel
+from options import poll_channel, accent_color
 
 class Poll(commands.Cog):
     def __init__(self, bot):
@@ -23,7 +23,7 @@ class Poll(commands.Cog):
     
     @commands.slash_command(description='Предложить идею')
     async def poll(self, ctx: discord.ApplicationContext, *, question):
-        pollEmbed = discord.Embed(title = "Новое предложение", description = f"{question}", color = 0x209af8)
+        pollEmbed = discord.Embed(title = "Новое предложение", description = f"{question}", color = accent_color)
         pollEmbed.add_field(
             name = 'Автор',
             value = f'<@{ctx.author.id}>'

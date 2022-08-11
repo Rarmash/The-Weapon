@@ -9,6 +9,8 @@ load_dotenv(dotenv_path=env_path)
 datapath = 'data.json'
 token = os.environ["TOKEN"]
 mongodb_link = os.environ["MONGODB"]
+accent_color = 0x209af8
+
 log_channel = 952519133117960192
 admin_channel = 647756597904408617
 ticket_category = 1006910617833177118

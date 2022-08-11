@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from ignoreList import bannedChannels, bannedUsers
-from options import mongodb_link, datapath, log_channel
+from options import mongodb_link, datapath, log_channel, accent_color
 import pymongo
 import json
 
@@ -21,7 +21,7 @@ class Logger(commands.Cog):
         embed = discord.Embed(
             title='Удалённое сообщение',
             description=ctx.content,
-            color=0x209af8
+            color=accent_color
         )
         embed.add_field(
             name='Автор',
@@ -52,7 +52,7 @@ class Logger(commands.Cog):
     async def on_message_edit(self, before, after):
         channel = self.bot.get_channel(log_channel)
         embed = discord.Embed(
-            color=0x209af8
+            color=accent_color
         )
         embed.add_field(
             name="Редактированное сообщение",
