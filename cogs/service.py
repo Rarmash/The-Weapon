@@ -58,6 +58,31 @@ class Service(commands.Cog):
             os.abort()
         else:
             await ctx.respond("Недостаточно прав для выполнения данной команды.")
+            
+    @service.command()
+    async def unload(self, ctx, extension):
+        if ctx.author.id == admin_id:
+            self.bot.unload_extension(f"cogs.{extension}")
+            await ctx.respond(f"**cogs.{extension}** выгружается...")
+        else:
+            await ctx.respond("Недостаточно прав для выполнения данной команды.")
+
+    @service.command()
+    async def load(self, ctx, extension):
+        if ctx.author.id == admin_id:
+            self.bot.load_extension(f"cogs.{extension}")
+            await ctx.respond(f"**cogs.{extension}** запускается...")
+        else:
+            await ctx.respond("Недостаточно прав для выполнения данной команды.")
+
+    @service.command()
+    async def reload(self, ctx, extension):
+        if ctx.author.id == admin_id:
+            self.bot.unload_extension(f"cogs.{extension}")
+            self.bot.load_extension(f"cogs.{extension}")
+            await ctx.respond(f"**cogs.{extension}** перезапускается...")
+        else:
+            await ctx.respond("Недостаточно прав для выполнения данной команды.")
 
 def setup(bot):
     bot.add_cog(Service(bot))

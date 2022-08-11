@@ -34,33 +34,7 @@ async def on_ready():
     print("------")
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="за этой установкой"))
 
-cogs = bot.create_group("service", "Сервисные команды")
 
-@cogs.command()
-async def unload(ctx, extension):
-    if ctx.author.id == admin_id:
-        bot.unload_extension(f"cogs.{extension}")
-        await ctx.respond(f"**cogs.{extension}** выгружается...")
-    else:
-        await ctx.respond("Недостаточно прав для выполнения данной команды.")
-
-@cogs.command()
-async def load(ctx, extension):
-    if ctx.author.id == admin_id:
-        bot.load_extension(f"cogs.{extension}")
-        await ctx.respond(f"**cogs.{extension}** запускается...")
-    else:
-        await ctx.respond("Недостаточно прав для выполнения данной команды.")
-
-@cogs.command()
-async def reload(ctx, extension):
-    if ctx.author.id == admin_id:
-        bot.unload_extension(f"cogs.{extension}")
-        bot.load_extension(f"cogs.{extension}")
-        await ctx.respond(f"**cogs.{extension}** перезапускается...")
-    else:
-        await ctx.respond("Недостаточно прав для выполнения данной команды.")
-        
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py") and filename != "__init__.py":
         bot.load_extension(f'cogs.{filename[:-3]}')
