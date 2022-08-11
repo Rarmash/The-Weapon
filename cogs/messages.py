@@ -1,7 +1,7 @@
 import json
 import discord
 from discord.ext import commands
-from options import mongodb_link, admin_channel, datapath
+from options import mongodb_link, admin_channel, datapath, accent_color
 import pymongo
 
 myclient = pymongo.MongoClient(mongodb_link)
@@ -51,7 +51,7 @@ class MessagesCounter(commands.Cog):
             desk += f'<@{users[0]}>: {users[1]}\n'
             kolvo += int(users[1])
         embed = discord.Embed(title='Лидеры по сообщениям',
-                              description=desk, color=0x209af8)
+                              description=desk, color=accent_color)
         # embed.set_thumbnail(url=guild.icon_url)
         embed.set_footer(text=f"Всего отправлено {kolvo} сообщений")
         await ctx.respond(embed=embed)
@@ -76,7 +76,7 @@ class MessagesCounter(commands.Cog):
         channel = self.bot.get_channel(admin_channel)
         embed = discord.Embed(
             description=f'<@{author}> ({member.display_name}) вышел с сервера.',
-            color=0x209af8
+            color=accent_color
         )
         await channel.send(embed=embed)
 

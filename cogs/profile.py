@@ -6,7 +6,7 @@ import datetime
 from math import ceil
 import sys
 import platform
-from options import insider_id, datapath
+from options import insider_id, datapath, admin_id, accent_color
 
 class Profile(commands.Cog):
     def __init__(self, bot):
@@ -36,7 +36,7 @@ class Profile(commands.Cog):
             quantity = 0
         if user.id != self.Bot.user.id:
             time_out = '(в тайм-ауте)' if user.timed_out else ''
-            embed = discord.Embed(title = f'Привет, я {user.name}', description=f"<@{user.id}> — {status} {time_out}", color = 0x209af8)
+            embed = discord.Embed(title = f'Привет, я {user.name}', description=f"<@{user.id}> — {status} {time_out}", color = accent_color)
             embed.add_field(name = "Регистрация", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             if not user.bot:
@@ -45,8 +45,8 @@ class Profile(commands.Cog):
                 embed.set_footer(text="Принимает участие в тестировании и помогает серверу стать лучше")
             embed.set_thumbnail(url=user.avatar)
         if user.id == self.Bot.user.id:
-            embed = discord.Embed(title = f'Привет, я {user.name}', description=f"Тег: <@{user.id}>", color = 0x209af8)
-            embed.add_field(name = "Владелец", value="<@390567552830406656>")
+            embed = discord.Embed(title = f'Привет, я {user.name}', description=f"Тег: <@{user.id}>", color = accent_color)
+            embed.add_field(name = "Владелец", value=f"<@{admin_id}>")
             embed.add_field(name = "Сервер бота", value = "Rebox Shit Force")
             embed.add_field(name = "Создан", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")

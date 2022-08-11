@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from options import accent_color
 
 class Mod(commands.Cog):
     def __init__(self, client):
@@ -10,7 +11,7 @@ class Mod(commands.Cog):
         await member.ban(reason = reason)
         embed = discord.Embed(
             description=f'<@{member.id}>, пошёл нахуй из интернета.\n**Бан по причине**: {reason}.',
-            color=0x209af8
+            color=accent_color
         )
         await ctx.respond(embed=embed)
     
@@ -19,7 +20,7 @@ class Mod(commands.Cog):
         await member.kick(reason = reason)
         embed = discord.Embed(
             description=f'<@{member.id}>, пошёл нахуй из интернета.\n**Кик по причине**: {reason}.',
-            color=0x209af8
+            color=accent_color
         )
         await ctx.respond(embed=embed)
     
