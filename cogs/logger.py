@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from ignoreList import bannedChannels, bannedUsers
+from ignoreList import bannedChannels, bannedUsers, bannedCategories
 from options import mongodb_link, datapath, log_channel, accent_color
 import pymongo
 import json
@@ -31,7 +31,7 @@ class Logger(commands.Cog):
             name='Канал',
             value=f'<#{ctx.channel.id}>'
         )
-        if (ctx.channel.id not in bannedChannels) and (ctx.author.id not in bannedUsers) and (not ctx.author.bot):
+        if (ctx.channel.id not in bannedChannels) and (ctx.author.id not in bannedUsers) and (not ctx.author.bot) and (ctx.channel.category_id not in bannedCategories):
             for attach in ctx.attachments:
                 imgn = attach.filename
                 img = io.BytesIO(await attach.read())
@@ -78,7 +78,7 @@ class Logger(commands.Cog):
             name='Канал',
             value=f'<#{before.channel.id}>'
         )
-        if (before.channel.id not in bannedChannels) and (before.author.id not in bannedUsers) and (not before.author.bot) and (before.content != after.content):
+        if (before.channel.id not in bannedChannels) and (before.author.id not in bannedUsers) and (not before.author.bot) and (before.content != after.content) and (before.channel.category_id not in bannedCategories):
             await channel.send(embed=embed)
 
 
