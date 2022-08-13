@@ -51,7 +51,6 @@ class MessagesCounter(commands.Cog):
             kolvo += int(users[1])
         embed = discord.Embed(title='Лидеры по сообщениям',
                               description=desk, color=accent_color)
-        # embed.set_thumbnail(url=guild.icon_url)
         embed.set_footer(text=f"Всего отправлено {kolvo} сообщений")
         await ctx.respond(embed=embed)
         

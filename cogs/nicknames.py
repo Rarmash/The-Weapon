@@ -14,7 +14,6 @@ class Nicknames(commands.Cog):
                 await memberAfter.edit(nick=PLACEHOLDER_NICKNAME)
                 break
 
-    # triggered on username change
     @commands.Cog.listener()
     async def on_user_update(self, memberBefore, memberAfter):
         for symbol in symbols:
@@ -22,8 +21,6 @@ class Nicknames(commands.Cog):
                 await memberAfter.edit(nick=PLACEHOLDER_NICKNAME)
                 break
 
-
-    # check if new members' usernames need filtering
     @commands.Cog.listener()
     async def on_member_join(self, member):
         for symbol in symbols:
