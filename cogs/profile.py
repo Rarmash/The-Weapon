@@ -53,6 +53,7 @@ class Profile(commands.Cog):
             embed.add_field(name = "Статус", value = status)
             embed.add_field(name = "ОС", value = sys.platform)
             embed.add_field(name = "Версия Python", value = platform.python_version())
+            embed.add_field(name = "Версия Pycord", value = discord.__version__)
             embed.add_field(name = "Приглашение", value = "[Тык](https://discord.com/oauth2/authorize?client_id=935560968778448947&scope=bot&permissions=8)")
             embed.set_thumbnail(url=user.avatar)
         await ctx.respond(embed = embed)
