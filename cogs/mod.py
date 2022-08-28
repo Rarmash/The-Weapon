@@ -14,7 +14,7 @@ class Mod(commands.Cog):
     
     @mod.command(description='Забанить аутягу')
     async def ban(self, ctx, member: discord.Member, *, reason = None):
-        await member.ban(reason = reason)
+        await member.ban(reason = f"{ctx.author}: {reason}")
         embed = discord.Embed(
             description=f'<@{member.id}>, пошёл нахуй из интернета.\n**Бан по причине**: {reason}.',
             color=accent_color
@@ -23,7 +23,7 @@ class Mod(commands.Cog):
     
     @mod.command(description='Кикнуть аутягу')
     async def kick(self, ctx, member: discord.Member, *, reason = None):
-        await member.kick(reason = reason)
+        await member.kick(reason = f"{ctx.author}: {reason}")
         embed = discord.Embed(
             description=f'<@{member.id}>, пошёл нахуй из интернета.\n**Кик по причине**: {reason}.',
             color=accent_color
@@ -36,7 +36,7 @@ class Mod(commands.Cog):
         if days == 0 and hours == 0 and minutes == 0 and seconds == 0:
             await ctx.respond("Вы не можете отправить пользователя в тайм-аут без определения срока!", ephemeral = True)
         else:
-            await member.timeout_for(duration, reason=reason)
+            await member.timeout_for(duration, reason=f"{ctx.author}: {reason}")
             embed = discord.Embed(
                 description=f"<@{member.id}> в тайм-ауте на {days} дней {hours} часов {minutes} минут {seconds} секунд.\nПричина: {reason}.",
                 color=accent_color
