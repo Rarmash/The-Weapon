@@ -39,8 +39,6 @@ class Logger(commands.Cog):
                 await channel.send(file = discord.File(img, imgn), embed=embed)
             except UnboundLocalError:
                 await channel.send(embed=embed)
-        with open(datapath) as file:
-            file_data = json.load(file)
         with open(datapath, 'r') as file:
             messageCount = json.load(file)
             author = str(ctx.author.id)
@@ -49,10 +47,10 @@ class Logger(commands.Cog):
         with open(datapath, 'w') as update_file:
             json.dump(messageCount, update_file, indent=4)
             Collection.delete_many({})
-            if isinstance(file_data, list):
-                Collection.insert_many(file_data)
+            if isinstance(messageCount, list):
+                Collection.insert_many(messageCount)
             else:
-                Collection.insert_one(file_data)
+                Collection.insert_one(messageCount)
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):

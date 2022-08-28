@@ -7,6 +7,7 @@ env_path = Path('.')/'.env'
 load_dotenv(dotenv_path=env_path)
 
 datapath = 'data.json'
+timeoutpath = 'timeouts.json'
 token = os.environ["TOKEN"]
 mongodb_link = os.environ["MONGODB"]
 accent_color = 0x209af8

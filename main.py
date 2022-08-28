@@ -1,7 +1,7 @@
 import discord
 import os
 import pymongo
-from options import token, admin_id, mongodb_link, datapath
+from options import token, admin_id, mongodb_link, datapath, timeoutpath
 import os.path
 
 intents = discord.Intents.all()
@@ -21,6 +21,15 @@ for data in Collection.find({}, {'_id': 0}):
     with open(datapath, 'w+') as newsave:
         newsave.write(str(data).replace("'", '"'))
 
+Collection1 = myclient["Messages"]["Timeouts"]
+
+if os.path.exists(timeoutpath):
+    os.remove(timeoutpath)
+
+for data in Collection1.find({}, {'_id': 0}):
+    with open(timeoutpath, 'w+') as newsave:
+        newsave.write(str(data).replace("'", '"'))
+
 myclient.close()
 
 @bot.event
@@ -32,7 +41,7 @@ async def on_ready():
     for guild in bot.guilds:
         print(f"Подключились к серверу: {guild}")
     print("------")
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="за этой установкой"))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name="за этой установкой"))
 
 
 for filename in os.listdir("./cogs"):

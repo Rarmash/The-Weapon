@@ -6,7 +6,7 @@ import datetime
 from math import ceil
 import sys
 import platform
-from options import insider_id, datapath, admin_id, accent_color
+from options import insider_id, datapath, admin_id, accent_color, timeoutpath
 
 class Profile(commands.Cog):
     def __init__(self, bot):
@@ -27,6 +27,8 @@ class Profile(commands.Cog):
             status = "⛔ не беспокоить"
         with open(datapath) as json_file:
             json_data = json.load(json_file)
+        with open(timeoutpath) as json_file:
+            timeout_data = json.load(json_file)
         for users in json_data:
             if int(users) == user.id:
                 quantity = json_data[users]
@@ -34,6 +36,13 @@ class Profile(commands.Cog):
             quantity
         except:
             quantity = 0
+        for users in timeout_data:
+            if int(users) == user.id:
+                timeoutquantity = timeout_data[users]
+        try:
+            timeoutquantity
+        except:
+            timeoutquantity = 0
         if user.id != self.Bot.user.id:
             time_out = '(в тайм-ауте)' if user.timed_out else ''
             embed = discord.Embed(title = f'Привет, я {user.name}', description=f"<@{user.id}> — {status} {time_out}", color = accent_color)
@@ -42,6 +51,7 @@ class Profile(commands.Cog):
             if not user.bot:
                 embed.add_field(name = "Сообщений", value = quantity)
             if discord.utils.get(ctx.guild.roles, id=insider_id) in user.roles:
+                embed.add_field(name = "Всего тайм-аутов", value = timeoutquantity)
                 embed.set_footer(text="Принимает участие в тестировании и помогает серверу стать лучше")
             embed.set_thumbnail(url=user.avatar)
         if user.id == self.Bot.user.id:

@@ -7,7 +7,12 @@ import pymongo
 myclient = pymongo.MongoClient(mongodb_link)
 Collection = myclient["Messages"]["Messages"]
 
-messageCount = json.load(open(datapath, 'r'))
+try:
+    messageCount = json.load(open(datapath, 'r'))
+except:
+    with open(datapath, 'w+') as newsave:
+        newsave.write('{}')
+    messageCount = json.load(open(datapath, 'r'))
 
 
 class MessagesCounter(commands.Cog):
@@ -16,8 +21,6 @@ class MessagesCounter(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, ctx):
-        with open(datapath) as file:
-            file_data = json.load(file)
         with open(datapath, 'r') as file:
             messageCount = json.load(file)
             author = str(ctx.author.id)
@@ -29,12 +32,12 @@ class MessagesCounter(commands.Cog):
             with open(datapath, 'w') as update_file:
                 json.dump(messageCount, update_file, indent=4)
                 Collection.delete_many({})
-                if isinstance(file_data, list):
-                    Collection.insert_many(file_data)
+                if isinstance(messageCount, list):
+                    Collection.insert_many(messageCount)
                 else:
-                    Collection.insert_one(file_data)
+                    Collection.insert_one(messageCount)
 
-    @commands.slash_command(description='Посмотреть таблицу лидеров')
+    @commands.slash_command(description='Посмотреть таблицу лидеров по сообщениям')
     async def leaderboard(self, ctx):
         with open(datapath, 'r') as file:
             leaderboard = json.load(file)
