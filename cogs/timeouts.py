@@ -1,7 +1,7 @@
 import json
 import discord
 from discord.ext import commands
-from options import mongodb_link, timeoutpath, accent_color
+from options import mongodb_link, timeoutpath
 import pymongo
 
 myclient = pymongo.MongoClient(mongodb_link)
@@ -35,25 +35,6 @@ class Timeouts(commands.Cog):
                     Collection.insert_many(timeoutCount)
                 else:
                     Collection.insert_one(timeoutCount)
-                    
-    @commands.slash_command(description='Посмотреть таблицу лидеров по тайм-аутам')
-    async def timeoutleaderboard(self, ctx):
-        with open(timeoutpath, 'r') as file:
-            leaderboard = json.load(file)
-        user_ids = list(leaderboard.keys())
-        user_message_counts = list(leaderboard.values())
-        new_leaderboard = []
-        for index, user_id in enumerate(user_ids, 1):
-            new_leaderboard.append([user_id, user_message_counts[index - 1]])
-        new_leaderboard.sort(key=lambda items: items[1], reverse=True)
-        desk = ''
-        kolvo = 0
-        for users in new_leaderboard:
-            desk += f'<@{users[0]}>: {users[1]}\n'
-            kolvo += int(users[1])
-        embed = discord.Embed(title='Лидеры по тайм-аутам',
-                              description=desk, color=accent_color)
-        embed.set_footer(text=f"Всего получено {kolvo} тайм-аутов")
-        await ctx.respond(embed=embed)
+
 def setup(bot):
     bot.add_cog(Timeouts(bot))

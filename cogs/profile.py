@@ -50,8 +50,8 @@ class Profile(commands.Cog):
             embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             if not user.bot:
                 embed.add_field(name = "Сообщений", value = quantity)
-            if discord.utils.get(ctx.guild.roles, id=insider_id) in user.roles:
                 embed.add_field(name = "Всего тайм-аутов", value = timeoutquantity)
+            if discord.utils.get(ctx.guild.roles, id=insider_id) in user.roles:
                 embed.set_footer(text="Принимает участие в тестировании и помогает серверу стать лучше")
             embed.set_thumbnail(url=user.avatar)
         if user.id == self.Bot.user.id:

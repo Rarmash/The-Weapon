@@ -36,27 +36,7 @@ class MessagesCounter(commands.Cog):
                     Collection.insert_many(messageCount)
                 else:
                     Collection.insert_one(messageCount)
-
-    @commands.slash_command(description='Посмотреть таблицу лидеров по сообщениям')
-    async def leaderboard(self, ctx):
-        with open(datapath, 'r') as file:
-            leaderboard = json.load(file)
-        user_ids = list(leaderboard.keys())
-        user_message_counts = list(leaderboard.values())
-        new_leaderboard = []
-        for index, user_id in enumerate(user_ids, 1):
-            new_leaderboard.append([user_id, user_message_counts[index - 1]])
-        new_leaderboard.sort(key=lambda items: items[1], reverse=True)
-        desk = ''
-        kolvo = 0
-        for users in new_leaderboard:
-            desk += f'<@{users[0]}>: {users[1]}\n'
-            kolvo += int(users[1])
-        embed = discord.Embed(title='Лидеры по сообщениям',
-                              description=desk, color=accent_color)
-        embed.set_footer(text=f"Всего отправлено {kolvo} сообщений")
-        await ctx.respond(embed=embed)
-        
+    
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         with open(datapath) as file:
@@ -80,7 +60,6 @@ class MessagesCounter(commands.Cog):
             color=accent_color
         )
         await channel.send(embed=embed)
-
-
+    
 def setup(bot):
     bot.add_cog(MessagesCounter(bot))
