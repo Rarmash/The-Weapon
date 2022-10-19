@@ -3,3 +3,4 @@ cogs/__pycache__
 .env
 data.json
 timeouts.json
+roles.json
