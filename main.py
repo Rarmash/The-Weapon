@@ -1,7 +1,7 @@
 import discord
 import os
 import pymongo
-from options import token, admin_id, mongodb_link, datapath, timeoutpath
+from options import token, mongodb_link, datapath, timeoutpath
 import os.path
 
 intents = discord.Intents.all()
