@@ -7,13 +7,15 @@ import json
 with open("serverEvents.json", "r", encoding='utf8') as file:
     data = json.load(file)
 
-serverEventsDates, serverEventsTitles, serverEventsDescriptions, serverEventsIcons = [], [], [], []
+serverEvents = []
 
 for i in data:
-    serverEventsTitles.append(data[i][0][u'title'])
-    serverEventsDescriptions.append(data[i][0][u'description'])
-    serverEventsIcons.append(data[i][0][u'icon'])
-    serverEventsDates.append(data[i][0][u'date'])
+    a = []
+    a.append(data[i][0][u'title'])
+    a.append(data[i][0][u'description'])
+    a.append(data[i][0][u'icon'])
+    a.append(data[i][0][u'date'])
+    serverEvents.append(a)
 
 class Special(commands.Cog):
     def __init__(self, bot):
@@ -22,14 +24,14 @@ class Special(commands.Cog):
     @commands.slash_command(description='Текущий эвент на сервере')
     async def event(self, ctx: discord.ApplicationContext):
         now = datetime.now()
-        event1 = str(serverEventsDates[0]).split(" - ")
+        event1 = str(serverEvents[0][3]).split(" - ")
         if datetime.strptime(event1[0], '%d.%m.%Y %H:%M') < now < datetime.strptime(event1[1], '%d.%m.%Y %H:%M'):
             eventEmbed = discord.Embed(
-                title=f"Текущее событие: {serverEventsTitles[0]}",
-                description=serverEventsDescriptions[0],
+                title=f"Текущее событие: {serverEvents[0][0]}",
+                description=serverEvents[0][1],
                 color = accent_color
             )
-            eventEmbed.set_thumbnail(url=serverEventsIcons[0])
+            eventEmbed.set_thumbnail(url=serverEvents[0][2])
             eventEmbed.add_field(name="Событие закончится", value=f"<t:{str(datetime.strptime(event1[1], '%d.%m.%Y %H:%M').timestamp())[:-2]}:R>")
         else:
             eventEmbed = discord.Embed(
