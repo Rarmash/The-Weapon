@@ -3,7 +3,6 @@ import os
 import pymongo
 from options import token, mongodb_link, datapath, timeoutpath
 import os.path
-from keep_alive import keep_alive
 
 intents = discord.Intents.all()
 intents.presences = True
@@ -49,5 +48,4 @@ for filename in os.listdir("./cogs"):
     if filename.endswith(".py") and filename != "__init__.py":
         bot.load_extension(f'cogs.{filename[:-3]}')
 
-keep_alive()
 bot.run(token)
