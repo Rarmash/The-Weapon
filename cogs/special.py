@@ -10,11 +10,8 @@ with open("serverEvents.json", "r", encoding='utf8') as file:
 serverEvents = []
 
 for i in data:
-    a = []
-    a.append(data[i][0][u'title'])
-    a.append(data[i][0][u'description'])
-    a.append(data[i][0][u'icon'])
-    a.append(data[i][0][u'date'])
+    a = [data[i][0][u'title'], data[i][0][u'description'], data[i][0][u'icon'], data[i][0][u'date']]
+
     serverEvents.append(a)
 
 class Special(commands.Cog):
