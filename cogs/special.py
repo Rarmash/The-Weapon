@@ -21,16 +21,20 @@ class Special(commands.Cog):
     @commands.slash_command(description='Текущий эвент на сервере')
     async def event(self, ctx: discord.ApplicationContext):
         now = datetime.now()
-        event1 = str(serverEvents[0][3]).split(" - ")
-        if datetime.strptime(event1[0], '%d.%m.%Y %H:%M') < now < datetime.strptime(event1[1], '%d.%m.%Y %H:%M'):
-            eventEmbed = discord.Embed(
-                title=f"Текущее событие: {serverEvents[0][0]}",
-                description=serverEvents[0][1],
-                color = accent_color
-            )
-            eventEmbed.set_thumbnail(url=serverEvents[0][2])
-            eventEmbed.add_field(name="Событие закончится", value=f"<t:{str(datetime.strptime(event1[1], '%d.%m.%Y %H:%M').timestamp())[:-2]}:R>")
-        else:
+        k = 0
+        for i in serverEvents:
+            event1 = str(i[3]).split(" - ")
+            if datetime.strptime(event1[0], '%d.%m.%Y %H:%M') < now < datetime.strptime(event1[1], '%d.%m.%Y %H:%M'):
+                eventEmbed = discord.Embed(
+                    title=f"Текущее событие: {i[0]}",
+                    description=i[1],
+                    color = accent_color
+                )
+                eventEmbed.set_thumbnail(url=i[2])
+                eventEmbed.add_field(name="Событие закончится", value=f"<t:{str(datetime.strptime(event1[1], '%d.%m.%Y %H:%M').timestamp())[:-2]}:R>")
+                k = 1
+                break
+        if k == 0:
             eventEmbed = discord.Embed(
                 description="Сейчас на сервере не проходит никакое событие!",
                 color = accent_color
