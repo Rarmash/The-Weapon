@@ -46,8 +46,8 @@ class Profile(commands.Cog):
         if user.id != self.Bot.user.id:
             time_out = '(в тайм-ауте)' if user.timed_out else ''
             embed = discord.Embed(title = f'Привет, я {user.name}', description=f"<@{user.id}> — {status} {time_out}", color = accent_color)
-            embed.add_field(name = "Регистрация", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
-            embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
+            embed.add_field(name = "Регистрация", value = f"<t:{ceil(time.mktime((datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S')+datetime.timedelta(hours=3)).timetuple()))}:f>")
+            embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime((datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S')+datetime.timedelta(hours=3)).timetuple()))}:f>")
             if not user.bot:
                 embed.add_field(name = "Сообщений", value = quantity)
                 embed.add_field(name = "Всего тайм-аутов", value = timeoutquantity)
@@ -58,8 +58,8 @@ class Profile(commands.Cog):
             embed = discord.Embed(title = f'Привет, я {user.name}', description=f"Тег: <@{user.id}>", color = accent_color)
             embed.add_field(name = "Владелец", value=f"<@{admin_id}>")
             embed.add_field(name = "Сервер бота", value = "Rebox Shit Force")
-            embed.add_field(name = "Создан", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
-            embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
+            embed.add_field(name = "Создан", value = f"<t:{ceil(time.mktime((datetime.datetime.strptime(str(user.created_at.strftime(date_format))+datetime.timedelta(hours=3)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
+            embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime((datetime.datetime.strptime(str(user.joined_at.strftime(date_format))+datetime.timedelta(hours=3)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
             embed.add_field(name = "Статус", value = status)
             embed.add_field(name = "ОС", value = sys.platform)
             embed.add_field(name = "Версия Python", value = platform.python_version())
