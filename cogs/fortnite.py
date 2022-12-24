@@ -71,7 +71,12 @@ class Fortnite(commands.Cog):
         except KeyError:
             status = fortnite_api_requests_error(username)
             if status == 403:
-                await ctx.respond(f"❗ Данные игрока **{username}** скрыты (ошибка **{status}**).")
+                guide_files = [
+                    discord.File('resources/fortnitestatsguide1.png'),
+                    discord.File('resources/fortnitestatsguide2.png'),
+                    discord.File('resources/fortnitestatsguide3.png')
+                ]
+                await ctx.respond(f"❗ Данные игрока **{username}** скрыты (ошибка **{status}**).\nЕсли это ваш аккаунт, откройте статистику в настройках игры.", files=guide_files)
             elif status == 404:
                 await ctx.respond(f"❗ Игрок **{username}** не найден (ошибка **{status}**).")
             else:
