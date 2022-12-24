@@ -11,13 +11,25 @@ def fortnite_api_requests(username):
     return json.loads(requests.get(
         request_url,
         params={
-            "displayName": username,
-            "platform": "epic"
+            "displayName": username
         },
         headers={
             "Authorization": fortniteapi
         }
     ).content)["data"]
+
+def fortnite_api_requests_error(username):
+    request_url = f"https://fortnite-api.com/v2/stats/br/v2?name={username}"
+    
+    return json.loads(requests.get(
+        request_url,
+        params={
+            "displayName": username
+        },
+        headers={
+            "Authorization": fortniteapi
+        }
+    ).content)["status"]
 
 def fortnite_api_map():
     request_url = "https://fortnite-api.com/v1/map"
@@ -56,8 +68,14 @@ class Fortnite(commands.Cog):
             embed.add_field(name="🕓 Всего сыграно минут", value=f'{f["stats"]["all"]["overall"]["minutesPlayed"]}')
             embed.add_field(name="🙋‍♂️ Всего игроков пережито", value=f'{f["stats"]["all"]["overall"]["playersOutlived"]}')
             await ctx.respond(embed = embed)
-        except:
-            await ctx.respond('📛 Игрок не найден!')
+        except KeyError:
+            status = fortnite_api_requests_error(username)
+            if status == 403:
+                await ctx.respond(f"❗ Данные игрока **{username}** скрыты (ошибка **{status}**).")
+            elif status == 404:
+                await ctx.respond(f"❗ Игрок **{username}** не найден (ошибка **{status}**).")
+            else:
+                await ctx.respond(f"❓ Возникла ошибка **{status}**...")
         
     @fortnite.command(description='Посмотреть карту')
     async def map(self, ctx: discord.ApplicationContext):
