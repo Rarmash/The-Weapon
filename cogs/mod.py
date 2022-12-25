@@ -14,11 +14,12 @@ class Mod(commands.Cog):
     
     @mod.command(description='Забанить аутягу')
     async def ban(self, ctx, member: discord.Member, *, reason = None):
-        await member.ban(reason = f"{ctx.author}: {reason}")
         embed = discord.Embed(
             description=f'<@{member.id}>, пошёл нахуй из интернета.\n**Бан по причине**: {reason}.',
             color=accent_color
         )
+        await member.send(embed=embed)
+        await member.ban(reason = f"{ctx.author}: {reason}")
         await ctx.respond(embed=embed)
     
     @mod.command(description='Кикнуть аутягу')

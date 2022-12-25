@@ -21,15 +21,18 @@ class RolesBack(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        with open(rolespath, 'r') as file:
-            rolesCount = json.load(file)
-            author = str(member.id)
-        roles = str(rolesCount[author]).split("-")
-        for role in roles:
-            try:
-                await member.add_roles(discord.utils.get(member.guild.roles, id=int(role)))
-            except:
-                pass
+        try:
+            with open(rolespath, 'r') as file:
+                rolesCount = json.load(file)
+                author = str(member.id)
+            roles = str(rolesCount[author]).split("-")
+            for role in roles:
+                try:
+                    await member.add_roles(discord.utils.get(member.guild.roles, id=int(role)))
+                except:
+                    pass
+        except KeyError:
+            pass
         
     
     @commands.Cog.listener()
