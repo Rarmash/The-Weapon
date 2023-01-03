@@ -18,7 +18,10 @@ class Mod(commands.Cog):
             description=f'<@{member.id}>, пошёл нахуй из интернета.\n**Бан по причине**: {reason}.',
             color=accent_color
         )
-        await member.send(embed=embed)
+        try:
+            await member.send(embed=embed)
+        except:
+            pass
         await member.ban(reason = f"{ctx.author}: {reason}")
         await ctx.respond(embed=embed)
     
