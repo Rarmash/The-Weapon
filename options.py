@@ -13,6 +13,7 @@ eventspath = 'serverEvents.json'
 token = os.environ["TOKEN"]
 mongodb_link = os.environ["MONGODB"]
 fortniteapi = os.environ["FORTNITEAPI"]
+debugmode = os.environ["DEBUGMODE"]
 accent_color = 0x209af8
 
 log_channel = 952519133117960192
