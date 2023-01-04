@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from ignoreList import bannedChannels, bannedUsers, bannedCategories
-from options import mongodb_link, datapath, log_channel, accent_color
+from options import mongodb_link, userpath, log_channel, accent_color
 import pymongo
 import json
 import io
@@ -9,7 +9,7 @@ import io
 myclient = pymongo.MongoClient(mongodb_link)
 Collection = myclient["Messages"]["Messages"]
 
-messageCount = json.load(open(datapath, 'r'))
+messageCount = json.load(open(userpath, 'r'))
 
 class Logger(commands.Cog):
     def __init__(self, bot):
@@ -39,12 +39,12 @@ class Logger(commands.Cog):
                 await channel.send(file = discord.File(img, imgn), embed=embed)
             except UnboundLocalError:
                 await channel.send(embed=embed)
-        with open(datapath, 'r') as file:
+        with open(userpath, 'r') as file:
             messageCount = json.load(file)
             author = str(ctx.author.id)
         if not ctx.author.bot:
-            messageCount[author] -= 1
-        with open(datapath, 'w') as update_file:
+            messageCount[author][u"messages"] -= 1
+        with open(userpath, 'w') as update_file:
             json.dump(messageCount, update_file, indent=4)
             Collection.delete_many({})
             if isinstance(messageCount, list):

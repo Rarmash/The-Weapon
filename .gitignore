@@ -4,3 +4,5 @@ cogs/__pycache__
 data.json
 timeouts.json
 roles.json
+users.json
+serverEvents.json

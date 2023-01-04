@@ -1,7 +1,7 @@
 import discord
 import os
 import pymongo
-from options import token, mongodb_link, datapath, timeoutpath, eventspath, debugmode
+from options import token, mongodb_link, eventspath, debugmode, userpath
 import os.path
 import json
 
@@ -13,30 +13,22 @@ intents.messages = True
 bot = discord.Bot(case_insensitive=True, intents=intents)
 
 myclient = pymongo.MongoClient(mongodb_link)
-Collection = myclient["Messages"]["Messages"]
 
-if os.path.exists(datapath):
-    os.remove(datapath)
+Collection = myclient["Server"]["Users"]
+
+if os.path.exists(userpath):
+    os.remove(userpath)
 
 for data in Collection.find({}, {'_id': 0}):
-    with open(datapath, 'w+') as newsave:
+    with open(userpath, 'w+') as newsave:
         newsave.write(str(data).replace("'", '"'))
 
-Collection1 = myclient["Messages"]["Timeouts"]
-
-if os.path.exists(timeoutpath):
-    os.remove(timeoutpath)
-
-for data in Collection1.find({}, {'_id': 0}):
-    with open(timeoutpath, 'w+') as newsave:
-        newsave.write(str(data).replace("'", '"'))
-
-Collection2 = myclient["Server"]["Events"]
+Collection1 = myclient["Server"]["Events"]
 
 if os.path.exists(eventspath):
     os.remove(eventspath)
 
-for data in Collection2.find({}, {'_id': 0}):
+for data in Collection1.find({}, {'_id': 0}):
     with open(eventspath, 'w+', encoding="utf8") as newsave:
         json.dump(data, newsave, indent=4, ensure_ascii=False)
 

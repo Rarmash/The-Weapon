@@ -2,27 +2,13 @@ import json
 import discord
 from discord.ext import commands
 from discord.commands import SlashCommandGroup
-from options import mongodb_link, timeoutpath, datapath, accent_color
+from options import mongodb_link, userpath, accent_color
 import pymongo
 
 myclient = pymongo.MongoClient(mongodb_link)
-Collection = myclient["Messages"]["Timeouts"]
+Collection = myclient["Server"]["Users"]
 
-try:
-    timeoutCount = json.load(open(timeoutpath, 'r'))
-except:
-    with open(timeoutpath, 'w+') as newsave:
-        newsave.write('{}')
-    timeoutCount = json.load(open(timeoutpath, 'r'))
-
-Collection = myclient["Messages"]["Messages"]
-
-try:
-    messageCount = json.load(open(datapath, 'r'))
-except:
-    with open(datapath, 'w+') as newsave:
-        newsave.write('{}')
-    messageCount = json.load(open(datapath, 'r'))
+counters = json.load(open(userpath, 'r'))
 
 class Leaderboards(commands.Cog):
     def __init__(self, bot):
@@ -32,13 +18,17 @@ class Leaderboards(commands.Cog):
     
     @leaderboardcmd.command(description='Посмотреть таблицу лидеров по тайм-аутам')
     async def timeouts(self, ctx):
-        with open(timeoutpath, 'r') as file:
+        with open(userpath, 'r') as file:
             leaderboard = json.load(file)
         user_ids = list(leaderboard.keys())
-        user_message_counts = list(leaderboard.values())
+        print(user_ids)
+        user_message_counts = []
+        for i in leaderboard:
+            user_message_counts.append(leaderboard[i][u"timeouts"])
         new_leaderboard = []
         for index, user_id in enumerate(user_ids, 1):
-            new_leaderboard.append([user_id, user_message_counts[index - 1]])
+            if user_message_counts[index - 1] != 0:
+                new_leaderboard.append([user_id, user_message_counts[index - 1]])
         new_leaderboard.sort(key=lambda items: items[1], reverse=True)
         desk = ''
         kolvo = 0
@@ -52,10 +42,12 @@ class Leaderboards(commands.Cog):
         
     @leaderboardcmd.command(description='Посмотреть таблицу лидеров по сообщениям')
     async def messages(self, ctx):
-        with open(datapath, 'r') as file:
+        with open(userpath, 'r') as file:
             leaderboard = json.load(file)
         user_ids = list(leaderboard.keys())
-        user_message_counts = list(leaderboard.values())
+        user_message_counts = []
+        for i in leaderboard:
+            user_message_counts.append(leaderboard[i][u"messages"])
         new_leaderboard = []
         for index, user_id in enumerate(user_ids, 1):
             new_leaderboard.append([user_id, user_message_counts[index - 1]])

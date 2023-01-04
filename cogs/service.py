@@ -3,7 +3,7 @@ from discord.ext import commands
 from discord.commands import SlashCommandGroup
 from options import admin_id
 import os
-from options import token, mongodb_link, datapath
+from options import token, mongodb_link, userpath
 import time
 import datetime
 from math import ceil
@@ -41,7 +41,7 @@ class Service(commands.Cog):
         
     @service.command(description='Отправить JSON всех участников')
     async def jsondump(self, ctx):
-        await ctx.respond('Дамп JSON файла всех участников.', file=discord.File(datapath))
+        await ctx.respond('Дамп JSON файла всех участников.', file=discord.File(userpath))
         
     @service.command(description='Отправить инфу по боту')
     async def botsecret(self, ctx):

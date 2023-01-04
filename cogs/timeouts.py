@@ -1,18 +1,13 @@
 import json
 import discord
 from discord.ext import commands
-from options import mongodb_link, timeoutpath
+from options import mongodb_link, userpath
 import pymongo
 
 myclient = pymongo.MongoClient(mongodb_link)
-Collection = myclient["Messages"]["Timeouts"]
+Collection = myclient["Server"]["Users"]
 
-try:
-    timeoutCount = json.load(open(timeoutpath, 'r'))
-except:
-    with open(timeoutpath, 'w+') as newsave:
-        newsave.write('{}')
-    timeoutCount = json.load(open(timeoutpath, 'r'))
+timeoutCount = json.load(open(userpath, 'r'))
 
 class Timeouts(commands.Cog):
     def __init__(self, bot):
@@ -21,14 +16,11 @@ class Timeouts(commands.Cog):
     @commands.Cog.listener()
     async def on_member_update(self, before, after):
         if after.timed_out:
-            with open(timeoutpath, 'r') as file:
+            with open(userpath, 'r') as file:
                 timeoutCount = json.load(file)
                 author = str(after.id)
-            if author in timeoutCount:
-                timeoutCount[author] += 1
-            else:
-                timeoutCount[author] = 1
-            with open(timeoutpath, 'w') as update_file:
+            timeoutCount[author][u'timeouts'] += 1
+            with open(userpath, 'w') as update_file:
                 json.dump(timeoutCount, update_file, indent=4)
                 Collection.delete_many({})
                 if isinstance(timeoutCount, list):

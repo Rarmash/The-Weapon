@@ -6,10 +6,9 @@ load_dotenv()
 env_path = Path('.')/'.env'
 load_dotenv(dotenv_path=env_path)
 
-datapath = 'data.json'
-timeoutpath = 'timeouts.json'
 rolespath = 'roles.json'
 eventspath = 'serverEvents.json'
+userpath = 'users.json'
 token = os.environ["TOKEN"]
 mongodb_link = os.environ["MONGODB"]
 fortniteapi = os.environ["FORTNITEAPI"]
