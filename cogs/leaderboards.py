@@ -21,7 +21,6 @@ class Leaderboards(commands.Cog):
         with open(userpath, 'r') as file:
             leaderboard = json.load(file)
         user_ids = list(leaderboard.keys())
-        print(user_ids)
         user_message_counts = []
         for i in leaderboard:
             user_message_counts.append(leaderboard[i][u"timeouts"])
