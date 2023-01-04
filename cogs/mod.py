@@ -24,6 +24,16 @@ class Mod(commands.Cog):
             pass
         await member.ban(reason = f"{ctx.author}: {reason}")
         await ctx.respond(embed=embed)
+        
+    @mod.command(description='Забанить аутягу по ID')
+    async def banid(self, ctx, identificator, *, reason = None):
+        member = await self.client.fetch_user(identificator)
+        await ctx.guild.ban(member, reason = f"{ctx.author}: {reason}")
+        embed = discord.Embed(
+            description=f'<@{identificator}>, пошёл нахуй из интернета.\n**Бан по причине**: {reason}.',
+            color=accent_color
+        )
+        await ctx.respond(embed=embed)
     
     @mod.command(description='Кикнуть аутягу')
     async def kick(self, ctx, member: discord.Member, *, reason = None):
