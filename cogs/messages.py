@@ -44,7 +44,10 @@ class MessagesCounter(commands.Cog):
             author = str(member.id)
         if not member.bot:
             if author in messageCount:
-                del messageCount[author]
+                if messageCount[author][u"timeouts"] == 0:
+                    del messageCount[author]
+                else:
+                    messageCount[author][u"messages"] = 0
             with open(userpath, 'w') as update_file:
                 json.dump(messageCount, update_file, indent=4)
                 Collection.delete_many({})
