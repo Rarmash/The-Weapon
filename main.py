@@ -47,10 +47,11 @@ async def on_ready():
 
 
 for filename in os.listdir("./cogs"):
-    if filename.endswith(".py") and filename != "__init__.py":
-        if filename == "events.py" and debugmode == "ON":
-            pass
-        else:
-            bot.load_extension(f'cogs.{filename[:-3]}')
+    if (
+        filename.endswith(".py")
+        and filename != "__init__.py"
+        and (filename != "events.py" or debugmode != "ON")
+    ):
+        bot.load_extension(f'cogs.{filename[:-3]}')
 
 bot.run(token)
