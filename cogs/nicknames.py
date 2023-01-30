@@ -1,7 +1,7 @@
 from discord.ext import commands
 
 symbols = ['ٴ']
-PLACEHOLDER_NICKNAME = 'По правилу 7 я пидор'
+PLACEHOLDER_NICKNAME = 'Правило 2: исправь ник'
 
 class Nicknames(commands.Cog):
     def __init__(self, bot):

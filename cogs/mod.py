@@ -4,7 +4,6 @@ import discord
 from discord.ext import commands
 from discord.commands import SlashCommandGroup
 from options import accent_color
-import datetime
 
 class Mod(commands.Cog):
     def __init__(self, client):
@@ -56,6 +55,13 @@ class Mod(commands.Cog):
                 color=accent_color
             )
             await ctx.respond(embed=embed)
+        
+    @mod.command(description='Снести человеку никнейм')
+    async def bannickname(self, ctx, member: discord.Member, reason: Option(int, max_value = 11)):
+        PLACEHOLDER_NICKNAME = f'Правило {reason}: исправь ник'
+        embed = discord.Embed(description=f"Никнейм пользователя {member.display_name} был изменён по правилу {reason}.", color=accent_color)
+        await ctx.respond(embed = embed)
+        await member.edit(nick=PLACEHOLDER_NICKNAME)  
     
 def setup(bot):
     bot.add_cog(Mod(bot))

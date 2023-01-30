@@ -72,9 +72,9 @@ class Fortnite(commands.Cog):
             status = fortnite_api_requests_error(username)
             if status == 403:
                 guide_files = [
-                    discord.File('resources/fortnitestatsguide1.png'),
-                    discord.File('resources/fortnitestatsguide2.png'),
-                    discord.File('resources/fortnitestatsguide3.png')
+                    discord.File('resources/fortnite/fortnitestatsguide1.png'),
+                    discord.File('resources/fortnite/fortnitestatsguide2.png'),
+                    discord.File('resources/fortnite/fortnitestatsguide3.png')
                 ]
                 await ctx.respond(f"❗ Данные игрока **{username}** скрыты (ошибка **{status}**).\nЕсли это ваш аккаунт, откройте статистику в настройках игры.", files=guide_files)
             elif status == 404:
