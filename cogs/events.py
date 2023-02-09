@@ -1,4 +1,5 @@
 from discord.ext import commands
+import asyncio
 
 class Events(commands.Cog):
 
@@ -9,6 +10,16 @@ class Events(commands.Cog):
     async def on_application_command_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
             await ctx.respond(error, delete_after=5.0)
+
+    @commands.Cog.listener()
+    async def on_voice_state_update(self, member, before, after):
+        voice_state = member.guild.voice_client
+        if voice_state is None:
+            # Exiting if the bot it's not connected to a voice channel
+            return 
+
+        if len(voice_state.channel.members) == 1:
+            await voice_state.disconnect()
     
 def setup(bot):
     bot.add_cog(Events(bot))

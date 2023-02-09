@@ -34,6 +34,8 @@ for data in Collection1.find({}, {'_id': 0}):
 
 myclient.close()
 
+status = ['In the Library', 'Killing Flood', 'Dodging Spartan Lasers']
+
 @bot.event
 async def on_ready():
     print("------")

@@ -1,8 +1,10 @@
 __pycache__/*
 cogs/__pycache__
+bin/*
 .env
 data.json
 timeouts.json
 roles.json
 users.json
 serverEvents.json
+speech.mp3
