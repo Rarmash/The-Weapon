@@ -4,6 +4,7 @@ from pathlib import Path
 import gtts
 from pydub import AudioSegment
 from pydub.effects import speedup
+from ignoreList import bannedTTSChannels
 
 FFMPEG_OPTIONS = {'options': '-vn'}
 
@@ -17,7 +18,7 @@ class Tts(commands.Cog):
         voice = discord.utils.get(self.Bot.voice_clients, guild=ctx.guild)
         try:
             vc = user.voice.channel
-            if ctx.channel.id == vc.id:
+            if ctx.channel.id == vc.id and ctx.channel.id not in bannedTTSChannels:
                 tempfile = "speech.mp3"
                 try:
                     ch = await vc.connect()
