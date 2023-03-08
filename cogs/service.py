@@ -37,7 +37,7 @@ class Service(commands.Cog):
     @commands.slash_command(description='Pat Eufeek')
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def pateufeek(self, ctx):
-        await ctx.respond("https://media.discordapp.net/attachments/964614960325992478/982716016184410122/4c8de376-2ee8-4938-b3bb-38f51b823875-4.gif")
+        await ctx.respond("https://cdn.discordapp.com/attachments/646322883555098647/1077840268667146241/5e7f7340-669c-4b2a-9c9f-9cb82a6f2943.gif")
         
     @service.command(description='Отправить JSON всех участников')
     async def jsondump(self, ctx):
