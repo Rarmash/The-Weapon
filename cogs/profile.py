@@ -1,4 +1,3 @@
-import json
 import discord
 from discord.ext import commands
 import time
@@ -6,7 +5,7 @@ import datetime
 from math import ceil
 import sys
 import platform
-from options import insider_id, userpath, admin_id, accent_color
+from options import insider_id, admin_id, accent_color, Collection
 
 class Profile(commands.Cog):
     def __init__(self, bot):
@@ -25,16 +24,15 @@ class Profile(commands.Cog):
             status = "🌙 не активен"
         if user.status == discord.Status.dnd:
             status = "⛔ не беспокоить"
-        with open(userpath) as json_file:
-            json_data = json.load(json_file)
+        user_data = Collection.find_one({"_id": str(user.id)})
         if user.id != self.Bot.user.id:
             time_out = '(в тайм-ауте)' if user.timed_out else ''
             embed = discord.Embed(title = f'Привет, я {user.name}', description=f"<@{user.id}> — {status} {time_out}", color = accent_color)
             embed.add_field(name = "Регистрация", value = f"<t:{ceil(time.mktime((datetime.datetime.strptime(str(user.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S')+datetime.timedelta(hours=3)).timetuple()))}:f>")
             embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime((datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S')+datetime.timedelta(hours=3)).timetuple()))}:f>")
             if not user.bot:
-                embed.add_field(name = "Сообщений", value = json_data[str(user.id)][u"messages"])
-                embed.add_field(name = "Всего тайм-аутов", value = json_data[str(user.id)][u"timeouts"])
+                embed.add_field(name = "Сообщений", value = user_data['messages'])
+                embed.add_field(name = "Всего тайм-аутов", value = user_data['timeouts'])
             if discord.utils.get(ctx.guild.roles, id=insider_id) in user.roles:
                 embed.set_footer(text="Принимает участие в тестировании и помогает серверу стать лучше")
             embed.set_thumbnail(url=user.avatar)

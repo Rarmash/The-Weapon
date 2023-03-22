@@ -1,14 +1,12 @@
 from dotenv import load_dotenv
 from pathlib import Path
 import os
+import pymongo
 
 load_dotenv()
 env_path = Path('.')/'.env'
 load_dotenv(dotenv_path=env_path)
 
-rolespath = 'roles.json'
-eventspath = 'serverEvents.json'
-userpath = 'users.json'
 token = os.environ["TOKEN"]
 mongodb_link = os.environ["MONGODB"]
 fortniteapi = os.environ["FORTNITEAPI"]
@@ -24,3 +22,8 @@ admin_id = 390567552830406656
 mod_role_id = 646327704450236416
 insider_id = 986290766848602265
 admin_role_id = 646327510161686528
+
+myclient = pymongo.MongoClient(mongodb_link)
+Collection = myclient["Server"]["Users"]
+EventsCollection = myclient["Server"]["Events"]
+RolesCollection = myclient["Server"]["UserRoles"]

@@ -15,7 +15,6 @@ class Tts(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, ctx):
         user = ctx.author
-        voice = discord.utils.get(self.Bot.voice_clients, guild=ctx.guild)
         try:
             vc = user.voice.channel
             if ctx.channel.id == vc.id and ctx.channel.id not in bannedTTSChannels:

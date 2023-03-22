@@ -1,15 +1,8 @@
 import discord
 from discord.ext import commands
 from ignoreList import bannedChannels, bannedUsers, bannedCategories
-from options import mongodb_link, userpath, log_channel, accent_color
-import pymongo
-import json
+from options import log_channel, accent_color, Collection
 import io
-
-myclient = pymongo.MongoClient(mongodb_link)
-Collection = myclient["Messages"]["Messages"]
-
-messageCount = json.load(open(userpath, 'r'))
 
 class Logger(commands.Cog):
     def __init__(self, bot):
@@ -18,6 +11,7 @@ class Logger(commands.Cog):
     @commands.Cog.listener()
     async def on_message_delete(self, ctx):
         channel = self.bot.get_channel(log_channel)
+        author = ctx.author.id
         embed = discord.Embed(
             title='Удалённое сообщение',
             description=ctx.content,
@@ -25,13 +19,13 @@ class Logger(commands.Cog):
         )
         embed.add_field(
             name='Автор',
-            value=f'<@{ctx.author.id}>'
+            value=f'<@{author}>'
         )
         embed.add_field(
             name='Канал',
             value=f'<#{ctx.channel.id}>'
         )
-        if (ctx.channel.id not in bannedChannels) and (ctx.author.id not in bannedUsers) and (not ctx.author.bot) and (ctx.channel.category_id not in bannedCategories):
+        if (ctx.channel.id not in bannedChannels) and (author not in bannedUsers) and (not ctx.author.bot) and (ctx.channel.category_id not in bannedCategories):
             for attach in ctx.attachments:
                 imgn = attach.filename
                 img = io.BytesIO(await attach.read())
@@ -39,18 +33,12 @@ class Logger(commands.Cog):
                 await channel.send(file = discord.File(img, imgn), embed=embed)
             except UnboundLocalError:
                 await channel.send(embed=embed)
-        with open(userpath, 'r') as file:
-            messageCount = json.load(file)
-            author = str(ctx.author.id)
-        if not ctx.author.bot:
-            messageCount[author][u"messages"] -= 1
-        with open(userpath, 'w') as update_file:
-            json.dump(messageCount, update_file, indent=4)
-            Collection.delete_many({})
-            if isinstance(messageCount, list):
-                Collection.insert_many(messageCount)
-            else:
-                Collection.insert_one(messageCount)
+        user = Collection.find_one({"_id": str(author)})
+        if user:
+            messages = user.get("messages", 0) - 1
+            Collection.update_one({"_id": str(author)}, {"$set": {"messages": messages}})
+        else:
+            Collection.insert_one({"_id": str(author), "messages": -1, "timeouts": 0})
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):

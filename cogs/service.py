@@ -1,9 +1,8 @@
 import discord
 from discord.ext import commands
 from discord.commands import SlashCommandGroup
-from options import admin_id
+from options import admin_id, token, mongodb_link
 import os
-from options import token, mongodb_link, userpath
 import time
 import datetime
 from math import ceil
@@ -38,10 +37,6 @@ class Service(commands.Cog):
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def pateufeek(self, ctx):
         await ctx.respond("https://cdn.discordapp.com/attachments/646322883555098647/1077840268667146241/5e7f7340-669c-4b2a-9c9f-9cb82a6f2943.gif")
-        
-    @service.command(description='Отправить JSON всех участников')
-    async def jsondump(self, ctx):
-        await ctx.respond('Дамп JSON файла всех участников.', file=discord.File(userpath))
         
     @service.command(description='Отправить инфу по боту')
     async def botsecret(self, ctx):

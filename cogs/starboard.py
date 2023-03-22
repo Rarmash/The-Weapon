@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 from options import media_channel
 from discord.utils import get

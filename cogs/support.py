@@ -15,12 +15,12 @@ class Support(commands.Cog):
             color=accent_color
         )
         tcategory = discord.utils.get(ctx.guild.categories, id=ticket_category)
-        channel = await ctx.guild.create_text_channel(f'тикет-<@{ctx.author.name}>', topic=text, category=tcategory)
+        channel = await ctx.guild.create_text_channel(f'Ticket-<@{ctx.author.name}>', topic=text, category=tcategory)
         await channel.set_permissions(ctx.author,speak=True,send_messages=True,read_message_history=True,read_messages=True)
         await channel.send(f'<@&{mod_role_id}>ы, надо обкашлять пару вопросиков.', embed=embed)
         await channel.send(f'<@{ctx.author.id}>, вам слово.')
         embed = discord.Embed(description='Ваш Тикет был успешно отправлен!', color = accent_color)        
-        await ctx.respond(embed = embed, delete_after=5.0)
+        await ctx.respond(embed = embed, ephemeral=True)
     
     @commands.slash_command(description='Добавить пользователя в Тикет')
     async def adduser(self, ctx, user: discord.Member):
@@ -38,8 +38,9 @@ class Support(commands.Cog):
             sleep(10)
             filename=f'{ctx.channel.name}.txt'
             with open(filename, "w") as file:
-                async for msg in ctx.channel.history(limit=None):
-                    file.write(f"{msg.created_at} - {msg.author.display_name}: {msg.clean_content}\n")
+                async for msg in ctx.channel.history(limit=None, oldest_first=True):
+                    msg_time = str(msg.created_at)[:-13]
+                    file.write(f"{msg_time} - {msg.author.display_name}: {msg.clean_content}\n")
             channel = self.Bot.get_channel(admin_channel)
             await channel.send(f'{ctx.channel.name} закрыт.', file=discord.File(filename))
             os.remove(filename)

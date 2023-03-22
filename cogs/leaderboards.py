@@ -1,14 +1,7 @@
-import json
 import discord
 from discord.ext import commands
 from discord.commands import SlashCommandGroup
-from options import mongodb_link, userpath, accent_color
-import pymongo
-
-myclient = pymongo.MongoClient(mongodb_link)
-Collection = myclient["Server"]["Users"]
-
-counters = json.load(open(userpath, 'r'))
+from options import accent_color, Collection
 
 class Leaderboards(commands.Cog):
     def __init__(self, bot):
@@ -18,16 +11,11 @@ class Leaderboards(commands.Cog):
     
     @leaderboardcmd.command(description='Посмотреть таблицу лидеров по тайм-аутам')
     async def timeouts(self, ctx):
-        with open(userpath, 'r') as file:
-            leaderboard = json.load(file)
-        user_ids = list(leaderboard.keys())
-        user_message_counts = []
-        for i in leaderboard:
-            user_message_counts.append(leaderboard[i][u"timeouts"])
+        users = Collection.find({})
         new_leaderboard = []
-        for index, user_id in enumerate(user_ids, 1):
-            if user_message_counts[index - 1] != 0:
-                new_leaderboard.append([user_id, user_message_counts[index - 1]])
+        for user in users:
+            if user.get("timeouts", 0) != 0:
+                new_leaderboard.append([user["_id"], user.get("timeouts", 0)])
         new_leaderboard.sort(key=lambda items: items[1], reverse=True)
         desk = ''
         kolvo = 0
@@ -41,15 +29,11 @@ class Leaderboards(commands.Cog):
         
     @leaderboardcmd.command(description='Посмотреть таблицу лидеров по сообщениям')
     async def messages(self, ctx):
-        with open(userpath, 'r') as file:
-            leaderboard = json.load(file)
-        user_ids = list(leaderboard.keys())
-        user_message_counts = []
-        for i in leaderboard:
-            user_message_counts.append(leaderboard[i][u"messages"])
+        users = Collection.find({})
         new_leaderboard = []
-        for index, user_id in enumerate(user_ids, 1):
-            new_leaderboard.append([user_id, user_message_counts[index - 1]])
+        for user in users:
+            if user.get("messages", 0) != 0:
+                new_leaderboard.append([user["_id"], user.get("messages", 0)])
         new_leaderboard.sort(key=lambda items: items[1], reverse=True)
         desk = ''
         kolvo, k = 0, 0
