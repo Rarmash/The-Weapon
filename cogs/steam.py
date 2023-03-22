@@ -20,8 +20,6 @@ class Steam(commands.Cog):
         try:
             steamurl = f"https://store.steampowered.com/api/appdetails?appids={appid}&cc={countrycode}&l=ru"
             app = requests.get(steamurl).json()[appid][u"data"]
-            with open('data.json', "w") as f:
-                json.dump(app, f, indent=4)
             embed = discord.Embed(
                 title=app[u"name"],
                 description=app[u"short_description"],
