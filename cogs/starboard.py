@@ -12,7 +12,7 @@ class Starboard(commands.Cog):
             channel = await self.Bot.fetch_channel(payload.channel_id)
             message = await channel.fetch_message(payload.message_id)
             reaction = get(message.reactions, emoji=payload.emoji.name)
-            if reaction and reaction.count >= 10:
+            if reaction and reaction.count >= 8:
                 await message.pin()
         
 def setup(bot):
