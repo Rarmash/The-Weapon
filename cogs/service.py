@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.commands import SlashCommandGroup
-from options import admin_id, token, mongodb_link
+from options import admin_id, token, mongodb_link, fortniteapi, xboxapi
 import os
 import time
 import datetime
@@ -36,13 +36,14 @@ class Service(commands.Cog):
     @commands.slash_command(description='Pat Eufeek')
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def pateufeek(self, ctx):
-        await ctx.respond("https://cdn.discordapp.com/attachments/646322883555098647/1077840268667146241/5e7f7340-669c-4b2a-9c9f-9cb82a6f2943.gif")
+        await ctx.respond("Ща будет.", ephemeral=True)
+        await ctx.send(discord.StickerItem(name="Pat Eufeek"))
         
     @service.command(description='Отправить инфу по боту')
     async def botsecret(self, ctx):
         if ctx.author.id == admin_id:
             await ctx.respond("Скинул в ЛС.")
-            await ctx.author.send(f'Токен бота: `{token}`\nБаза MongoDB: `{mongodb_link}`')
+            await ctx.author.send(f'Токен бота: `{token}`\nБаза MongoDB: `{mongodb_link}`\nFortnite API: `{fortniteapi}`\nXbox API: `{xboxapi}`')
         else:
             await ctx.respond("Недостаточно прав для выполнения данной команды.")   
 

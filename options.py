@@ -7,9 +7,12 @@ load_dotenv()
 env_path = Path('.')/'.env'
 load_dotenv(dotenv_path=env_path)
 
+version = "2.6.0"
+
 token = os.environ["TOKEN"]
 mongodb_link = os.environ["MONGODB"]
 fortniteapi = os.environ["FORTNITEAPI"]
+xboxapi = os.environ["XBOXAPI"]
 debugmode = os.environ["DEBUGMODE"]
 accent_color = 0x209af8
 
@@ -25,5 +28,4 @@ admin_role_id = 646327510161686528
 
 myclient = pymongo.MongoClient(mongodb_link)
 Collection = myclient["Server"]["Users"]
-EventsCollection = myclient["Server"]["Events"]
 RolesCollection = myclient["Server"]["UserRoles"]

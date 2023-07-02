@@ -5,7 +5,7 @@ import datetime
 from math import ceil
 import sys
 import platform
-from options import insider_id, admin_id, accent_color, Collection
+from options import insider_id, admin_id, accent_color, Collection, version
 
 class Profile(commands.Cog):
     def __init__(self, bot):
@@ -44,6 +44,7 @@ class Profile(commands.Cog):
             embed.add_field(name = "На сервере с", value = f"<t:{ceil(time.mktime((datetime.datetime.strptime(str(user.joined_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S')+datetime.timedelta(hours=3)).timetuple()))}:f>")
             embed.add_field(name = "Статус", value = status)
             embed.add_field(name = "ОС", value = sys.platform)
+            embed.add_field(name = "Версия бота", value = version)
             embed.add_field(name = "Версия Python", value = platform.python_version())
             embed.add_field(name = "Версия Pycord", value = discord.__version__)
             embed.add_field(name = "Приглашение", value = "[Тык](https://discord.com/oauth2/authorize?client_id=935560968778448947&scope=bot&permissions=8)")
