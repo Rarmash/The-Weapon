@@ -54,9 +54,12 @@ class Xbox(commands.Cog):
                 embed.add_field(name="Статус Gold", value=goldstatus)
                 embed.add_field(name="Фолловеров", value=f'{f["detail"]["followerCount"]}')
                 embed.add_field(name="Друзей", value=f'{f["detail"]["followingCount"]}')
-                title_count, recentgame, curscoreonrecgame, totalscoreonrecgame = get_games_amount(f["xuid"])
-                embed.add_field(name="Сыграно игр", value=title_count)
-                embed.add_field(name="Недавно играл в", value=f"{recentgame} (🅖 {curscoreonrecgame}/{totalscoreonrecgame})")
+                try:
+                    title_count, recentgame, curscoreonrecgame, totalscoreonrecgame = get_games_amount(f["xuid"])
+                    embed.add_field(name="Сыграно игр", value=title_count)
+                    embed.add_field(name="Недавно играл в", value=f"{recentgame} (🅖 {curscoreonrecgame}/{totalscoreonrecgame})")
+                except IndexError:
+                    embed.add_field(name="Игровая статистика", value="Отсутствует, либо скрыта")
                 embed.add_field(name = "Ссылка на профиль", value = f"[Тык](https://account.xbox.com/ru-ru/Profile?Gamertag={str(f['gamertag']).replace(' ', '%20')})")
                 try:
                     embed.add_field(name = "Владелец профиля", value=f"<@{Collection.find_one({'xbox': gamertag})['_id']}>")

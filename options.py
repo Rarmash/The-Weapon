@@ -8,7 +8,7 @@ load_dotenv()
 env_path = Path('.')/'.env'
 load_dotenv(dotenv_path=env_path)
 
-version = "2.7"
+version = "2.7.0.1"
 
 token = os.environ["TOKEN"]
 mongodb_link = os.environ["MONGODB"]

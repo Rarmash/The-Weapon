@@ -1,4 +1,4 @@
-# The Weapon ![Version](https://img.shields.io/badge/Latest-2.7/master-blue.svg)
+# The Weapon ![Version](https://img.shields.io/badge/Latest-2.7.0.1/master-blue.svg)
 Создана за авторством @r4rm4sh в поддержку сервера Rebox Shit Force. Мой префикс — обычный слэш «/» и щепотка доверия.
 
 ## 🛠️ Установка
