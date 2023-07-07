@@ -32,13 +32,7 @@ class Service(commands.Cog):
     @service.command(description='Проверить пинг')
     async def ping(self, ctx):
         await ctx.respond(f"Понг! :ping_pong: Задержка: {self.bot.latency*1000:,.0f} ms.")
-    
-    @commands.slash_command(description='Pat Eufeek')
-    @commands.cooldown(1, 60, commands.BucketType.user)
-    async def pateufeek(self, ctx):
-        await ctx.respond("Ща будет.", ephemeral=True)
-        await ctx.send(discord.StickerItem(name="Pat Eufeek"))
-        
+           
     @service.command(description='Отправить инфу по боту')
     async def botsecret(self, ctx):
         if ctx.author.id == admin_id:

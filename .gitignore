@@ -4,3 +4,4 @@ bin/*
 *.exe
 .env
 speech.mp3
+*.json
