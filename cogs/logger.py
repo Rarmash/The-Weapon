@@ -12,6 +12,11 @@ class Logger(commands.Cog):
     async def on_message_delete(self, ctx):
         channel = self.bot.get_channel(log_channel)
         author = ctx.author.id
+        user = Collection.find_one({"_id": str(author)})
+        if user:
+            Collection.update_one({"_id": str(author)}, {"$set": {"messages": user.get("messages", 0) - 1}})
+        else:
+            Collection.insert_one({"_id": str(author), "messages": -1, "timeouts": 0})
         embed = discord.Embed(
             title='Удалённое сообщение',
             description=ctx.content,
@@ -33,12 +38,6 @@ class Logger(commands.Cog):
                 await channel.send(file = discord.File(img, imgn), embed=embed)
             except UnboundLocalError:
                 await channel.send(embed=embed)
-        user = Collection.find_one({"_id": str(author)})
-        if user:
-            messages = user.get("messages", 0) - 1
-            Collection.update_one({"_id": str(author)}, {"$set": {"messages": messages}})
-        else:
-            Collection.insert_one({"_id": str(author), "messages": -1, "timeouts": 0})
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):

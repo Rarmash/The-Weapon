@@ -1,9 +1,10 @@
 py-cord[voice]==2.4.1
 python-dotenv==1.0.0
-pymongo==4.4.0
-dnspython==2.3.0
+pymongo==4.4.1
+dnspython==2.4.0
 requests==2.31.0
 gtts==2.3.2
 pydub==0.25.1
 asyncio==3.4.3
 certifi==2023.5.7
+requests==2.31.0

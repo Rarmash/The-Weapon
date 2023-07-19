@@ -16,14 +16,7 @@ class Profile(commands.Cog):
         date_format = "%#d.%#m.%Y в %H:%M:%S"
         if user is None:
             user = ctx.author
-        if user.status == discord.Status.online:
-            status = "🟢 в сети"
-        if user.status == discord.Status.offline:
-            status = "⚪ не в сети"
-        if user.status == discord.Status.idle:
-            status = "🌙 не активен"
-        if user.status == discord.Status.dnd:
-            status = "⛔ не беспокоить"
+        status = self.get_status_emoji(user.status)
         user_data = Collection.find_one({"_id": str(user.id)})
         if user.id != self.Bot.user.id:
             time_out = '(в тайм-ауте)' if user.timed_out else ''
@@ -33,14 +26,10 @@ class Profile(commands.Cog):
             if not user.bot:
                 embed.add_field(name = "Сообщений", value = user_data['messages'])
                 embed.add_field(name = "Всего тайм-аутов", value = user_data['timeouts'])
-                try:
+                if "xbox" in user_data:
                     embed.add_field(name = "Профиль Xbox", value = f"[{user_data['xbox']}](https://account.xbox.com/ru-ru/Profile?Gamertag={str(user_data['xbox']).replace(' ', '%20')})")
-                except KeyError:
-                    pass
-                try:
+                if "fortnite" in user_data:
                     embed.add_field(name = "Профиль Fortnite", value = user_data['fortnite'])
-                except KeyError:
-                    pass
             if discord.utils.get(ctx.guild.roles, id=insider_id) in user.roles:
                 embed.set_footer(text="Принимает участие в тестировании и помогает серверу стать лучше")
             embed.set_thumbnail(url=user.avatar)
@@ -58,6 +47,16 @@ class Profile(commands.Cog):
             embed.add_field(name = "Приглашение", value = "[Тык](https://discord.com/oauth2/authorize?client_id=935560968778448947&scope=bot&permissions=8)")
             embed.set_thumbnail(url=user.avatar)
         await ctx.respond(embed = embed)
+        
+    def get_status_emoji(self, status):
+        if status == discord.Status.online:
+            return "🟢 в сети"
+        elif status == discord.Status.offline:
+            return "⚪ не в сети"
+        elif status == discord.Status.idle:
+            return "🌙 не активен"
+        elif status == discord.Status.dnd:
+            return "⛔ не беспокоить"
 
 def setup(bot):
     bot.add_cog(Profile(bot))

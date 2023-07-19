@@ -3,5 +3,7 @@ cogs/__pycache__
 bin/*
 *.exe
 .env
+.env_master
+.env_dev
 speech.mp3
 *.json

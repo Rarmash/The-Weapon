@@ -27,11 +27,7 @@ class Service(commands.Cog):
         embed.add_field(name="Ботов", value=len(([member for member in ctx.guild.members if member.bot])))
         embed.add_field(name="Создан", value=f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(guild.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
         embed.add_field(name="Владелец", value=f"<@{guild.owner.id}>")
-        await ctx.respond(embed=embed)   
-    
-    @service.command(description='Проверить пинг')
-    async def ping(self, ctx):
-        await ctx.respond(f"Понг! :ping_pong: Задержка: {self.bot.latency*1000:,.0f} ms.")
+        await ctx.respond(embed=embed)
            
     @service.command(description='Отправить инфу по боту')
     async def botsecret(self, ctx):

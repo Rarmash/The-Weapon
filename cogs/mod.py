@@ -24,7 +24,7 @@ class Mod(commands.Cog):
         await ctx.respond(embed=embed)
         
     @mod.command(description='Забанить аутягу по ID')
-    async def banid(self, ctx, identificator, *, reason = None):
+    async def banid(self, ctx, identificator, *, reason):
         member = await self.client.fetch_user(identificator)
         await ctx.guild.ban(member, reason = f"{ctx.author}: {reason}")
         embed = discord.Embed(
@@ -34,7 +34,7 @@ class Mod(commands.Cog):
         await ctx.respond(embed=embed)
     
     @mod.command(description='Кикнуть аутягу')
-    async def kick(self, ctx, member: discord.Member, *, reason = None):
+    async def kick(self, ctx, member: discord.Member, *, reason):
         await member.kick(reason = f"{ctx.author}: {reason}")
         embed = discord.Embed(
             description=f'<@{member.id}>, пошёл нахуй из интернета.\n**Кик по причине**: {reason}.',
@@ -45,22 +45,15 @@ class Mod(commands.Cog):
     @mod.command(description='Замьютить аутягу')
     async def timeout(self, ctx, member: discord.Member, days: discord.Option(int, max_value = 27, default = 0, required = False), hours: discord.Option(int, max_value = 23, default = 0, required = False), minutes: discord.Option(int, max_value = 59, default = 0, required = False), seconds: discord.Option(int, max_value = 59, default = 0, required = False), reason=None):
         duration = timedelta(days = days, hours = hours, minutes = minutes, seconds = seconds)
-        if days == 0 and hours == 0 and minutes == 0 and seconds == 0:
-            await ctx.respond("Вы не можете отправить пользователя в тайм-аут без определения срока!", ephemeral = True)
-        else:
+        if duration.total_seconds() != 0:
             await member.timeout_for(duration, reason=f"{ctx.author}: {reason}")
             embed = discord.Embed(
                 description=f"<@{member.id}> в тайм-ауте на {days} дней {hours} часов {minutes} минут {seconds} секунд.\nПричина: {reason}.",
                 color=accent_color
             )
             await ctx.respond(embed=embed)
-        
-    @mod.command(description='Снести человеку никнейм')
-    async def bannickname(self, ctx, member: discord.Member, reason: discord.Option(int, max_value = 11)):
-        PLACEHOLDER_NICKNAME = f'Правило {reason}: исправь ник'
-        embed = discord.Embed(description=f"Никнейм пользователя {member.display_name} был изменён по правилу {reason}.", color=accent_color)
-        await ctx.respond(embed = embed)
-        await member.edit(nick=PLACEHOLDER_NICKNAME)  
+        else:
+            await ctx.respond("Вы не можете отправить пользователя в тайм-аут без определения срока!", ephemeral = True)
     
 def setup(bot):
     bot.add_cog(Mod(bot))
