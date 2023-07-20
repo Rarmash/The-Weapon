@@ -1,6 +1,6 @@
 import discord
 import os
-from options import token, debugmode, version
+from options import token, debugmode, version, myclient
 import os.path
 
 intents = discord.Intents.all()
@@ -10,8 +10,11 @@ intents.messages = True
 
 bot = discord.Bot(case_insensitive=True, intents=intents)
 
+# Gears are always cool
+
 @bot.event
 async def on_ready():
+    myclient
     print("------")
     print(f"{bot.user.name} запущен!")
     print(f"Версия: {version}")

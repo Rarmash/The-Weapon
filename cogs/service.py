@@ -17,7 +17,7 @@ class Service(commands.Cog):
     async def server(self, ctx):
         guild = ctx.guild
         date_format = "%#d.%#m.%Y в %H:%M:%S"
-        embed = discord.Embed(title=f"Информация о сервере {guild}", color = 0x209af8)
+        embed = discord.Embed(title=f"Информация о сервере RU Xbox Shit Force", color = 0x209af8)
         embed.set_thumbnail(url=guild.icon)
         embed.add_field(name="Описание", value=guild.description)
         embed.add_field(name="Каналов", value=len(guild.channels))

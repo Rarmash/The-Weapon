@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from pathlib import Path
-import gtts
+from gtts import gTTS
 from pydub import AudioSegment
 from pydub.effects import speedup
 from ignoreList import bannedTTSChannels
@@ -21,11 +21,11 @@ class Tts(commands.Cog):
                 tempfile = "speech.mp3"
                 try:
                     ch = await vc.connect()
-                except:
+                except discord.errors.ClientException:
                     await ctx.guild.voice_client.disconnect()
                     ch = await vc.connect()
                 speech = f"{user.display_name} пишет: {ctx.content}"
-                tts = gtts.gTTS(speech, lang="ru")
+                tts = gTTS(speech, lang="ru")
                 tts.save(tempfile)
                 audio = AudioSegment.from_mp3(tempfile)
                 new_file = speedup(audio,1.3,130)
