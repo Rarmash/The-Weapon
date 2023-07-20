@@ -30,4 +30,4 @@ except:
     myclient = pymongo.MongoClient(mongodb_link, tlsCAFile=certifi.where())
 Collection = myclient["Server"]["Users"]
 RolesCollection = myclient["Server"]["UserRoles"]
-SuggestionsCollection = myclient["Server"]["Suggestion"]
+SuggestionsCollection = myclient["Server"]["Suggestions"]
