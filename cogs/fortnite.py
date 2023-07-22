@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.commands import SlashCommandGroup
-from options import accent_color, fortniteapi, Collection
+from options import fortniteapi, myclient, servers_data
 import json
 import requests
 
@@ -42,13 +42,18 @@ def fortnite_api_map():
     ).content)["data"]["images"]["pois"]
 
 class Fortnite(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot, servers_data):
         self.Bot = bot
+        self.servers_data = servers_data
 
     fortnite = SlashCommandGroup("fortnite", "Команды по Fortnite")
 
     @fortnite.command(description='Посмотреть статистику по игроку')
     async def stats(self, ctx: discord.ApplicationContext, username = None):
+        server_data = self.servers_data.get(str(ctx.guild.id))
+        if not server_data:
+            return
+        Collection = myclient[f"{str(ctx.guild.id)}"]["Users"]
         await ctx.defer()
         existense = True
         if username is None:
@@ -61,7 +66,7 @@ class Fortnite(commands.Cog):
         if existense == True:
             try:
                 f = fortnite_api_requests(username)
-                embed = discord.Embed(title=f'Статистика игрока {f["account"]["name"]}', color=accent_color)
+                embed = discord.Embed(title=f'Статистика игрока {f["account"]["name"]}', color=int(server_data.get("accent_color"), 16))
                 embed.add_field(name="🎟️ Уровень боевого пропуска", value=f'{f["battlePass"]["level"]}')
                 embed.add_field(name="🎮 Всего матчей сыграно", value=f'{f["stats"]["all"]["overall"]["matches"]}')
                 embed.add_field(name="👑 Всего побед", value=f'{f["stats"]["all"]["overall"]["wins"]}')
@@ -98,21 +103,28 @@ class Fortnite(commands.Cog):
         
     @fortnite.command(description='Посмотреть карту')
     async def map(self, ctx: discord.ApplicationContext):
-        embed = discord.Embed(title='Карта Fortnite', color=accent_color)
+        server_data = self.servers_data.get(str(ctx.guild.id))
+        if not server_data:
+            return
+        embed = discord.Embed(title='Карта Fortnite', color=int(server_data.get("accent_color"), 16))
         embed.set_image(url = fortnite_api_map())
         await ctx.respond(embed = embed)    
         
     @fortnite.command(description='Привязать профиль Fortnite к учётной записи Discord')
     async def connect(self, ctx: discord.ApplicationContext, username):
+        server_data = self.servers_data.get(str(ctx.guild.id))
+        if not server_data:
+            return
+        Collection = myclient[f"{str(ctx.guild.id)}"]["Users"]
         await ctx.defer()
         author = str(ctx.author.id)
         try:
             f = fortnite_api_requests(username)
             Collection.update_one({"_id": author}, {"$set": {"fortnite": username}})
-            embed = discord.Embed(description=f"Аккаунт {username} был успешно привязан к вашей учётной записи!\nЕсли вы измените никнейм в игре, не забудьте его перепривязать здесь.", color=accent_color)
+            embed = discord.Embed(description=f"Аккаунт {username} был успешно привязан к вашей учётной записи!\nЕсли вы измените никнейм в игре, не забудьте его перепривязать здесь.", color=int(server_data.get("accent_color"), 16))
             await ctx.respond(embed=embed)
         except Exception as e:
             await ctx.respond(f"При добавлении возникла ошибка {e}.\nВозможно, вы неверно указали никнейм.")
     
 def setup(bot):
-    bot.add_cog(Fortnite(bot))
+    bot.add_cog(Fortnite(bot, servers_data))

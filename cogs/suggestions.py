@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from options import suggestions_channel, accent_color, SuggestionsCollection
+from options import myclient, servers_data
 
 
 class SuggestButtons(discord.ui.View):
@@ -22,8 +22,9 @@ class SuggestButtons(discord.ui.View):
             return False
         return True
 
-    @discord.ui.button(label="За (0)", style=discord.ButtonStyle.green, emoji="<:MinecraftAccept:936636758135828502>", custom_id='accept')
+    @discord.ui.button(label="За", style=discord.ButtonStyle.green, emoji="<:MinecraftAccept:936636758135828502>", custom_id='accept')
     async def accept_button_callback(self, button, interaction):
+        SuggestionsCollection = myclient[f"{str(interaction.guild.id)}"]["Suggestions"]
         self.data["accept_count"] += 1
         self.data["voted_users"].append(interaction.user.id)
         self.update_buttons()
@@ -35,8 +36,9 @@ class SuggestButtons(discord.ui.View):
             {"$set": self.data},
         )
 
-    @discord.ui.button(label="Против (0)", style=discord.ButtonStyle.red, emoji="<:MinecraftDeny:936636758127439883>", custom_id='deny')
+    @discord.ui.button(label="Против", style=discord.ButtonStyle.red, emoji="<:MinecraftDeny:936636758127439883>", custom_id='deny')
     async def deny_button_callback(self, button, interaction):
+        SuggestionsCollection = myclient[f"{str(interaction.guild.id)}"]["Suggestions"]
         self.data["deny_count"] += 1
         self.data["voted_users"].append(interaction.user.id)
         self.update_buttons()
@@ -50,29 +52,34 @@ class SuggestButtons(discord.ui.View):
 
 
 class Suggest(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot, servers_data):
         self.Bot = bot
+        self.servers_data = servers_data
 
     @commands.Cog.listener()
     async def on_ready(self):
         # Fetch existing suggestion data from the database and add views for each suggestion
-        all_suggestions = SuggestionsCollection.find()
-        for suggestion_data in all_suggestions:
-            suggestion_message_id = suggestion_data["_id"]
-            channel = self.Bot.get_channel(suggestions_channel)
+        for server_id, server_data in servers_data.items():
+            SuggestionsCollection = myclient[str(server_id)]["Suggestions"]
+            channel = self.Bot.get_channel(server_data["suggestions_channel"])
             if channel:
-                try:
-                    suggestion_message = await channel.fetch_message(suggestion_message_id)
-                    suggest_buttons = SuggestButtons(suggestion_message_id, suggestion_data)
-                    await suggestion_message.edit(view=suggest_buttons)
-                except discord.NotFound:
-                    print(f"Suggestion message with ID {suggestion_message_id} not found.")
-            else:
-                print(f"Suggestions channel with ID {suggestions_channel} not found.")
+                all_suggestions = SuggestionsCollection.find()
+                for suggestion_data in all_suggestions:
+                    suggestion_message_id = suggestion_data["_id"]
+                    try:
+                        suggestion_message = await channel.fetch_message(suggestion_message_id)
+                        suggest_buttons = SuggestButtons(suggestion_message_id, suggestion_data)
+                        await suggestion_message.edit(view=suggest_buttons)
+                    except discord.NotFound:
+                        print(f"Suggestion message with ID {suggestion_message_id} not found.")
 
     @commands.slash_command(description='Предложить идею')
     async def suggest(self, ctx: discord.ApplicationContext, *, question):
-        suggestEmbed = discord.Embed(title="Новое предложение", description=f"{question}", color=accent_color)
+        server_data = self.servers_data.get(str(ctx.guild.id))
+        if not server_data:
+            return
+        SuggestionsCollection = myclient[f"{str(ctx.guild.id)}"]["Suggestions"]
+        suggestEmbed = discord.Embed(title="Новое предложение", description=f"{question}", color=int(server_data.get("accent_color"), 16))
         suggestEmbed.add_field(
             name='Автор',
             value=f'<@{ctx.author.id}>'
@@ -92,4 +99,4 @@ class Suggest(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Suggest(bot))
+    bot.add_cog(Suggest(bot, servers_data))

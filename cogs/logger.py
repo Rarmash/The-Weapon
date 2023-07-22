@@ -1,17 +1,23 @@
 import discord
 from discord.ext import commands
-from ignoreList import bannedChannels, bannedUsers, bannedCategories
-from options import log_channel, accent_color, Collection
+from options import servers_data, myclient
 import io
 
 class Logger(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot, servers_data):
         self.bot = bot
+        self.servers_data = servers_data
 
     @commands.Cog.listener()
     async def on_message_delete(self, ctx):
-        channel = self.bot.get_channel(log_channel)
+        server_data = self.servers_data.get(str(ctx.guild.id))
+        if not server_data:
+            return
+        channel = self.bot.get_channel(server_data.get("log_channel"))
         author = ctx.author.id
+        Collection = myclient[f"{str(ctx.guild.id)}"]["Users"]
+        if ctx.channel.id in server_data.get("bannedChannels", []) or author in server_data.get("bannedUsers", []) or ctx.channel.category_id in server_data.get("bannedCategories", []):
+            return
         user = Collection.find_one({"_id": str(author)})
         if user:
             Collection.update_one({"_id": str(author)}, {"$set": {"messages": user.get("messages", 0) - 1}})
@@ -20,7 +26,7 @@ class Logger(commands.Cog):
         embed = discord.Embed(
             title='Удалённое сообщение',
             description=ctx.content,
-            color=accent_color
+            color=int(server_data.get("accent_color"), 16)
         )
         embed.add_field(
             name='Автор',
@@ -30,20 +36,25 @@ class Logger(commands.Cog):
             name='Канал',
             value=f'<#{ctx.channel.id}>'
         )
-        if (ctx.channel.id not in bannedChannels) and (author not in bannedUsers) and (not ctx.author.bot) and (ctx.channel.category_id not in bannedCategories):
-            for attach in ctx.attachments:
-                imgn = attach.filename
-                img = io.BytesIO(await attach.read())
-            try:
-                await channel.send(file = discord.File(img, imgn), embed=embed)
-            except UnboundLocalError:
-                await channel.send(embed=embed)
+        for attach in ctx.attachments:
+            imgn = attach.filename
+            img = io.BytesIO(await attach.read())
+        try:
+            await channel.send(file = discord.File(img, imgn), embed=embed)
+        except UnboundLocalError:
+            await channel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
-        channel = self.bot.get_channel(log_channel)
+        guild_id = str(before.guild.id)
+        server_data = self.servers_data.get(guild_id)
+        if not server_data:
+            return
+        if before.channel.id in server_data.get("bannedChannels", []) or before in server_data.get("bannedUsers", []) or before.channel.category_id in server_data.get("bannedCategories", []) or before.content == after.content:
+            return
+        channel = self.bot.get_channel(server_data.get("log_channel"))
         embed = discord.Embed(
-            color=accent_color
+            color=int(server_data.get("accent_color"), 16)
         )
         embed.add_field(
             name="Редактированное сообщение",
@@ -63,9 +74,8 @@ class Logger(commands.Cog):
             name='Канал',
             value=f'<#{before.channel.id}>'
         )
-        if (before.channel.id not in bannedChannels) and (before.author.id not in bannedUsers) and (not before.author.bot) and (before.content != after.content) and (before.channel.category_id not in bannedCategories):
-            await channel.send(embed=embed)
+        await channel.send(embed=embed)
 
 
 def setup(bot):
-    bot.add_cog(Logger(bot))
+    bot.add_cog(Logger(bot, servers_data))

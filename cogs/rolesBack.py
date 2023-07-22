@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from options import RolesCollection
+from options import myclient
 
 class RolesBack(commands.Cog):
     def __init__(self, bot):
@@ -9,7 +9,9 @@ class RolesBack(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         author = str(member.id)
-        roles = RolesCollection.find_one({"_id": author})
+        server_id = str(member.guild.id)
+        roles_collection = myclient[f"{server_id}"]["UserRoles"]
+        roles = roles_collection.find_one({"_id": author})
         if roles:
             roles = roles["roles"].split("-")
             for role in roles:
@@ -27,7 +29,9 @@ class RolesBack(commands.Cog):
             s += "-"
         s = s[:-1]
         author = str(member.id)
-        RolesCollection.update_one({"_id": author}, {"$set": {"roles": s}}, upsert=True)
+        server_id = str(member.guild.id)
+        roles_collection = myclient[f"{server_id}"]["UserRoles"]
+        roles_collection.update_one({"_id": author}, {"$set": {"roles": s}}, upsert=True)
         
 def setup(bot):
     bot.add_cog(RolesBack(bot))

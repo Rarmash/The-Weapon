@@ -3,7 +3,7 @@ import discord
 import json
 from discord.ext import commands
 from discord.commands import SlashCommandGroup
-from options import xboxapi, debugmode, Collection
+from options import xboxapi, debugmode, myclient
 
 def get_user_info(gamertag):
     response = requests.get(f'https://xbl.io/api/v2/search/{gamertag}', headers={'x-authorization': xboxapi})
@@ -33,6 +33,7 @@ class Xbox(commands.Cog):
 
     @xbox.command(description='Посмотреть статистику по пользователю')
     async def stats(self, ctx: discord.ApplicationContext, gamertag = None):
+        Collection = myclient[f"{str(ctx.guild.id)}"]["Users"]
         await ctx.defer()
         existense = True
         if gamertag is None:
@@ -75,6 +76,7 @@ class Xbox(commands.Cog):
 
     @xbox.command(description='Привязать профиль Xbox к учётной записи Discord')
     async def connect(self, ctx: discord.ApplicationContext, gamertag):
+        Collection = myclient[f"{str(ctx.guild.id)}"]["Users"]
         await ctx.defer()
         author = str(ctx.author.id)
         try:

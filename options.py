@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from os import environ as env
 import pymongo
 import certifi
+import json
 
 load_dotenv()
 
@@ -12,22 +13,11 @@ mongodb_link = env.get('MONGODB')
 fortniteapi = env.get('FORTNITEAPI')
 xboxapi = env.get('XBOXAPI')
 debugmode = env.get('DEBUGMODE')
-accent_color = 0x209af8
 
-log_channel = 952519133117960192
-admin_channel = 647756597904408617
-ticket_category = 1006910617833177118
-suggestions_channel = 931963318262968412
-media_channel = 966410850065874986
-admin_id = 390567552830406656
-mod_role_id = 646327704450236416
-insider_id = 986290766848602265
-admin_role_id = 646327510161686528
+with open('servers.json') as f:
+    servers_data = json.load(f)
 
 try:
     myclient = pymongo.MongoClient(mongodb_link)
 except:
     myclient = pymongo.MongoClient(mongodb_link, tlsCAFile=certifi.where())
-Collection = myclient["Server"]["Users"]
-RolesCollection = myclient["Server"]["UserRoles"]
-SuggestionsCollection = myclient["Server"]["Suggestions"]

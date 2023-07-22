@@ -24,12 +24,12 @@ async def on_ready():
     print("------")
     if debugmode == "ON":
         status = discord.Status.dnd
-        activity = discord.Activity(type=discord.ActivityType.competing, name=f"debug-режиме (v{version})")
+        activity = discord.Activity(type=discord.ActivityType.playing, name=f"debug-режиме (v{version})")
     else:
         status = discord.Status.online
         activity = discord.Activity(type=discord.ActivityType.watching, name=f"за этой установкой (v{version})")
     await bot.change_presence(status=status, activity=activity)
-
+    
 for filename in os.listdir("./cogs"):
     if (
         filename.endswith(".py")
@@ -37,4 +37,5 @@ for filename in os.listdir("./cogs"):
         and (filename != "events.py" or debugmode != "ON")
     ):
         bot.load_extension(f'cogs.{filename[:-3]}')
+
 bot.run(token)

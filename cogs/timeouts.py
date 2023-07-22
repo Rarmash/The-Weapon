@@ -1,5 +1,5 @@
 from discord.ext import commands
-from options import Collection
+from options import myclient
 
 class Timeouts(commands.Cog):
     def __init__(self, bot):
@@ -7,6 +7,7 @@ class Timeouts(commands.Cog):
         
     @commands.Cog.listener()
     async def on_member_update(self, before, after):
+        Collection = myclient[f"{str(before.guild.id)}"]["Users"]
         if after.timed_out:
             author = str(after.id)
             timeoutCount = Collection.find_one({"_id": author})

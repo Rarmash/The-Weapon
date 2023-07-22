@@ -1,15 +1,16 @@
 import discord
 from discord.ext import commands
 from discord.commands import SlashCommandGroup
-from options import admin_id, token, mongodb_link, fortniteapi, xboxapi
+from options import token, mongodb_link, fortniteapi, xboxapi, servers_data
 import os
 import time
 import datetime
 from math import ceil
 class Service(commands.Cog):
 
-    def __init__(self, bot):
+    def __init__(self, bot, servers_data):
         self.bot = bot
+        self.servers_data = servers_data
     
     service = SlashCommandGroup("service", "Сервисные команды")
     
@@ -31,7 +32,10 @@ class Service(commands.Cog):
            
     @service.command(description='Отправить инфу по боту')
     async def botsecret(self, ctx):
-        if ctx.author.id == admin_id:
+        server_data = self.servers_data.get(str(ctx.guild.id))
+        if not server_data:
+            return
+        if ctx.author.id == server_data.get("admin_id"):
             await ctx.respond("Скинул в ЛС.")
             await ctx.author.send(f'Токен бота: `{token}`\nБаза MongoDB: `{mongodb_link}`\nFortnite API: `{fortniteapi}`\nXbox API: `{xboxapi}`')
         else:
@@ -39,7 +43,10 @@ class Service(commands.Cog):
 
     @service.command(description='Выключить бота')
     async def shutdown(self, ctx):
-        if ctx.author.id == admin_id:
+        server_data = self.servers_data.get(str(ctx.guild.id))
+        if not server_data:
+            return
+        if ctx.author.id == server_data.get("admin_id"):
             await ctx.respond("Завершение работы... :wave:")
             os.abort()
         else:
@@ -47,7 +54,10 @@ class Service(commands.Cog):
             
     @service.command()
     async def unload(self, ctx, extension):
-        if ctx.author.id == admin_id:
+        server_data = self.servers_data.get(str(ctx.guild.id))
+        if not server_data:
+            return
+        if ctx.author.id == server_data.get("admin_id"):
             self.bot.unload_extension(f"cogs.{extension}")
             await ctx.respond(f"**cogs.{extension}** выгружается...")
         else:
@@ -55,7 +65,10 @@ class Service(commands.Cog):
 
     @service.command()
     async def load(self, ctx, extension):
-        if ctx.author.id == admin_id:
+        server_data = self.servers_data.get(str(ctx.guild.id))
+        if not server_data:
+            return
+        if ctx.author.id == server_data.get("admin_id"):
             self.bot.load_extension(f"cogs.{extension}")
             await ctx.respond(f"**cogs.{extension}** запускается...")
         else:
@@ -63,7 +76,10 @@ class Service(commands.Cog):
 
     @service.command()
     async def reload(self, ctx, extension):
-        if ctx.author.id == admin_id:
+        server_data = self.servers_data.get(str(ctx.guild.id))
+        if not server_data:
+            return
+        if ctx.author.id == server_data.get("admin_id"):
             self.bot.unload_extension(f"cogs.{extension}")
             self.bot.load_extension(f"cogs.{extension}")
             await ctx.respond(f"**cogs.{extension}** перезапускается...")
@@ -71,4 +87,4 @@ class Service(commands.Cog):
             await ctx.respond("Недостаточно прав для выполнения данной команды.")
 
 def setup(bot):
-    bot.add_cog(Service(bot))
+    bot.add_cog(Service(bot, servers_data))

@@ -1,13 +1,14 @@
 import discord
 from discord.ext import commands
 from discord.commands import SlashCommandGroup
-from options import accent_color
+from options import servers_data
 import requests
 import json
 
 class Steam(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot, servers_data):
         self.Bot = bot
+        self.servers_data = servers_data
 
     steam = SlashCommandGroup("steam", "Команды по Steam")
 
@@ -17,13 +18,16 @@ class Steam(commands.Cog):
                     appid, 
                     countrycode: discord.Option(str, choices=['RU', 'US', 'TR', 'AR', 'DE', 'UA'])
                     ):
+        server_data = self.servers_data.get(str(ctx.guild.id))
+        if not server_data:
+            return
         try:
             steamurl = f"https://store.steampowered.com/api/appdetails?appids={appid}&cc={countrycode}&l=ru"
             app = requests.get(steamurl).json()[appid][u"data"]
             embed = discord.Embed(
                 title=app[u"name"],
                 description=app[u"short_description"],
-                color=accent_color
+                color=int(server_data.get("accent_color"), 16)
             )
             embed.set_thumbnail(url=app[u"header_image"])
             embed.add_field(name="Дата выпуска", value=app[u"release_date"][u"date"])
@@ -45,4 +49,4 @@ class Steam(commands.Cog):
             await ctx.respond("Такой игры не существует!")
         
 def setup(bot):
-    bot.add_cog(Steam(bot))
+    bot.add_cog(Steam(bot, servers_data))

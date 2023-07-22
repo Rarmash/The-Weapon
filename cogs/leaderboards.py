@@ -1,16 +1,21 @@
 import discord
 from discord.ext import commands
 from discord.commands import SlashCommandGroup
-from options import accent_color, Collection
+from options import myclient, servers_data
 
 class Leaderboards(commands.Cog):
-    def __init__(self, bot):
+    def __init__(self, bot, servers_data):
         self.bot = bot
+        self.servers_data = servers_data
     
     leaderboardcmd = SlashCommandGroup("leaderboard", "Лидерборды")
     
     @leaderboardcmd.command(description='Посмотреть таблицу лидеров по тайм-аутам')
     async def timeouts(self, ctx):
+        server_data = self.servers_data.get(str(ctx.guild.id))
+        if not server_data:
+            return
+        Collection = myclient[f"{str(ctx.guild.id)}"]["Users"]
         users = Collection.find({})
         new_leaderboard = []
         for user in users:
@@ -23,12 +28,16 @@ class Leaderboards(commands.Cog):
             desk += f'<@{users[0]}>: {users[1]}\n'
             kolvo += int(users[1])
         embed = discord.Embed(title='Лидеры по тайм-аутам',
-                              description=desk, color=accent_color)
+                              description=desk, color=int(server_data.get("accent_color"), 16))
         embed.set_footer(text=f"Всего получено {kolvo} тайм-аутов")
         await ctx.respond(embed=embed)
         
     @leaderboardcmd.command(description='Посмотреть таблицу лидеров по сообщениям')
     async def messages(self, ctx):
+        server_data = self.servers_data.get(str(ctx.guild.id))
+        if not server_data:
+            return
+        Collection = myclient[f"{str(ctx.guild.id)}"]["Users"]
         users = Collection.find({})
         new_leaderboard = []
         for user in users:
@@ -51,7 +60,7 @@ class Leaderboards(commands.Cog):
             if k >= 10:
                 break
         embed = discord.Embed(title='Лидеры по сообщениям',
-                              description=desk, color=accent_color)
+                              description=desk, color=int(server_data.get("accent_color"), 16))
         user = str(ctx.author.id)
         k = 0
         place10 = 0
@@ -71,4 +80,4 @@ class Leaderboards(commands.Cog):
         await ctx.respond(embed=embed)
 
 def setup(bot):
-    bot.add_cog(Leaderboards(bot))
+    bot.add_cog(Leaderboards(bot, servers_data))
