@@ -14,7 +14,7 @@ class TicketButtons(discord.ui.View):
         server_data = self.servers_data.get(str(interaction.guild.id))
         if not server_data:
             return
-        if discord.utils.get(interaction.guild.roles, id=server_data.get("mod_role_id")) not in interaction.user.roles:
+        if not(discord.utils.get(interaction.guild.roles, id=server_data.get("elder_mod_role_id")) in interaction.user.roles or discord.utils.get(interaction.guild.roles, id=server_data.get("admin_role_id")) in interaction.user.roles):
             await interaction.response.send_message("У вас нет прав для выполнения данной команды.", ephemeral=True)
             return False
         return True
@@ -52,6 +52,8 @@ class Support(commands.Cog):
     @commands.slash_command(description='Отправить Тикет')
     async def ticket(self, ctx, text):
         server_data = self.servers_data.get(str(ctx.guild.id))
+        if not server_data:
+            return
         embed = discord.Embed(
             description=f'**<@{ctx.author.id}> открывает Тикет**\n**Причина:** {text}\n**В канале:** <#{ctx.channel.id}>',
             color=int(server_data.get("accent_color"), 16)
@@ -59,7 +61,7 @@ class Support(commands.Cog):
         tcategory = discord.utils.get(ctx.guild.categories, id=server_data.get("ticket_category"))
         channel = await ctx.guild.create_text_channel(f'Ticket-<@{ctx.author.name}>', topic=text, category=tcategory)
         await channel.set_permissions(ctx.author,speak=True,send_messages=True,read_message_history=True,read_messages=True)
-        await channel.send(f'<@&{server_data.get("mod_role_id")}>ы, надо обкашлять пару вопросиков.', embed=embed, view=TicketButtons(self.Bot, servers_data))
+        await channel.send(f'<@&{server_data.get("elder_mod_role_id")}>ы, надо обкашлять пару вопросиков.', embed=embed, view=TicketButtons(self.Bot, servers_data))
         await channel.send(f'<@{ctx.author.id}>, вам слово.')
         embed = discord.Embed(description='Ваш Тикет был успешно отправлен!', color = int(server_data.get("accent_color"), 16))        
         await ctx.respond(embed = embed, ephemeral=True)

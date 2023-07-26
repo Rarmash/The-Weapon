@@ -16,6 +16,9 @@ class Mod(commands.Cog):
         server_data = self.servers_data.get(str(ctx.guild.id))
         if not server_data:
             return
+        if not(discord.utils.get(ctx.guild.roles, id=server_data.get("elder_mod_role_id")) in ctx.user.roles or discord.utils.get(ctx.guild.roles, id=server_data.get("admin_role_id")) in ctx.user.roles):
+            await ctx.respond(f'У вас нет прав на бан пользователя. Для бана обратитесь к <@&{server_data.get("elder_mod_role_id")}>.')
+            return
         embed = discord.Embed(
             description=f'<@{member.id}>, пошёл нахуй из интернета.\n**Бан по причине**: {reason}.',
             color=int(server_data.get("accent_color"), 16)
@@ -32,6 +35,9 @@ class Mod(commands.Cog):
         server_data = self.servers_data.get(str(ctx.guild.id))
         if not server_data:
             return
+        if not(discord.utils.get(ctx.guild.roles, id=server_data.get("elder_mod_role_id")) in ctx.user.roles or discord.utils.get(ctx.guild.roles, id=server_data.get("admin_role_id")) in ctx.user.roles):
+            await ctx.respond(f'У вас нет прав на бан пользователя. Для бана обратитесь к <@&{server_data.get("elder_mod_role_id")}>.')
+            return
         member = await self.client.fetch_user(identificator)
         await ctx.guild.ban(member, reason = f"{ctx.author.display_name}: {reason}")
         embed = discord.Embed(
@@ -44,6 +50,9 @@ class Mod(commands.Cog):
     async def kick(self, ctx, member: discord.Member, *, reason):
         server_data = self.servers_data.get(str(ctx.guild.id))
         if not server_data:
+            return
+        if not(discord.utils.get(ctx.guild.roles, id=server_data.get("elder_mod_role_id")) in ctx.user.roles or discord.utils.get(ctx.guild.roles, id=server_data.get("admin_role_id")) in ctx.user.roles):
+            await ctx.respond(f'У вас нет прав на кик пользователя. Для бана обратитесь к <@&{server_data.get("elder_mod_role_id")}>.')
             return
         await member.kick(reason = f"{ctx.author}: {reason}")
         embed = discord.Embed(
