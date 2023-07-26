@@ -52,7 +52,7 @@ class Xbox(commands.Cog):
                     goldstatus = "Активен"
                 else:
                     goldstatus = "Не активен"
-                embed.add_field(name="Статус Gold", value=goldstatus)
+                embed.add_field(name="Статус Game Pass Core", value=goldstatus)
                 embed.add_field(name="Фолловеров", value=f'{f["detail"]["followerCount"]}')
                 embed.add_field(name="Друзей", value=f'{f["detail"]["followingCount"]}')
                 try:

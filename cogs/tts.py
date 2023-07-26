@@ -5,6 +5,7 @@ from gtts import gTTS
 from pydub import AudioSegment
 from pydub.effects import speedup
 from options import servers_data
+import re
 
 FFMPEG_OPTIONS = {'options': '-vn'}
 
@@ -29,7 +30,8 @@ class Tts(commands.Cog):
                     except discord.errors.ClientException:
                         await ctx.guild.voice_client.disconnect()
                         ch = await vc.connect()
-                    speech = f"{user.display_name} пишет: {ctx.content}"
+                    content_without_mentions = re.sub(r"<@[!&]?\d+>|<#\d+>", "", ctx.content)
+                    speech = f"{user.display_name} пишет: {content_without_mentions}"
                     tts = gTTS(speech, lang="ru")
                     tts.save(tempfile)
                     audio = AudioSegment.from_mp3(tempfile)
