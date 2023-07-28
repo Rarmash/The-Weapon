@@ -39,13 +39,13 @@ async def on_ready():
     await bot.change_presence(status=status, activity=activity)
     
 # Load cog extensions
-for filename in os.listdir("./cogs"):
+for filename in os.listdir("./gears"):
     if (
         filename.endswith(".py")
         and filename != "__init__.py"
         and (filename != "events.py" or debugmode != "ON")
     ):
-        bot.load_extension(f'cogs.{filename[:-3]}')
+        bot.load_extension(f'gears.{filename[:-3]}')
 
 # Run the bot with the provided token
 bot.run(token)

@@ -57,40 +57,40 @@ class Service(commands.Cog):
         else:
             await ctx.respond("Недостаточно прав для выполнения данной команды.")
 
-    # Subcommand to unload a cog
+    # Subcommand to unload a gear
     @service.command()
-    async def unload(self, ctx, extension):
+    async def unload(self, ctx, gear):
         server_data = self.servers_data.get(str(ctx.guild.id))
         if not server_data:
             return
         if ctx.author.id == server_data.get("admin_id"):
-            self.bot.unload_extension(f"cogs.{extension}")
-            await ctx.respond(f"**cogs.{extension}** выгружается...")
+            self.bot.unload_extension(f"gears.{gear}")
+            await ctx.respond(f"**gears.{gear}** выгружается...")
         else:
             await ctx.respond("Недостаточно прав для выполнения данной команды.")
 
-    # Subcommand to load a cog
+    # Subcommand to load a gear
     @service.command()
-    async def load(self, ctx, extension):
+    async def load(self, ctx, gear):
         server_data = self.servers_data.get(str(ctx.guild.id))
         if not server_data:
             return
         if ctx.author.id == server_data.get("admin_id"):
-            self.bot.load_extension(f"cogs.{extension}")
-            await ctx.respond(f"**cogs.{extension}** запускается...")
+            self.bot.load_extension(f"gears.{gear}")
+            await ctx.respond(f"**gears.{gear}** запускается...")
         else:
             await ctx.respond("Недостаточно прав для выполнения данной команды.")
 
-    # Subcommand to reload a cog
+    # Subcommand to reload a gear
     @service.command()
-    async def reload(self, ctx, extension):
+    async def reload(self, ctx, gear):
         server_data = self.servers_data.get(str(ctx.guild.id))
         if not server_data:
             return
         if ctx.author.id == server_data.get("admin_id"):
-            self.bot.unload_extension(f"cogs.{extension}")
-            self.bot.load_extension(f"cogs.{extension}")
-            await ctx.respond(f"**cogs.{extension}** перезапускается...")
+            self.bot.unload_extension(f"gears.{gear}")
+            self.bot.load_extension(f"gears.{gear}")
+            await ctx.respond(f"**gears.{gear}** перезапускается...")
         else:
             await ctx.respond("Недостаточно прав для выполнения данной команды.")
 
