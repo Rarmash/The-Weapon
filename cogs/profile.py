@@ -10,6 +10,7 @@ from options import version, myclient, servers_data
 class BotLink(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
+        # Create an invite button with a link to invite the bot to a guild
         invite_button = discord.ui.Button(label="Приглашение", style=discord.ButtonStyle.link, emoji="🤩", url = "https://discord.com/oauth2/authorize?client_id=935560968778448947&scope=bot&permissions=8")
         self.add_item(invite_button)
         
@@ -18,6 +19,7 @@ class Profile(commands.Cog):
         self.Bot = bot
         self.servers_data = servers_data
 
+    # Define the profile slash command
     @commands.slash_command(description='Посмотреть карточку профиля')
     async def profile(self, ctx: discord.ApplicationContext, user: discord.Member = None):
         server_data = self.servers_data.get(str(ctx.guild.id))
@@ -27,8 +29,14 @@ class Profile(commands.Cog):
         date_format = "%#d.%#m.%Y в %H:%M:%S"
         if user is None:
             user = ctx.author
+            
+        # Get the status emoji based on the user's status
         status = self.get_status_emoji(user.status)
+        
+        # Fetch user data from the database
         user_data = Collection.find_one({"_id": str(user.id)})
+        
+        # If the user is not the bot itself, display the user's profile information
         if user.id != self.Bot.user.id:
             time_out = '(в тайм-ауте)' if user.timed_out else ''
             embed = discord.Embed(title = f'Привет, я {user.name}', description=f"<@{user.id}> — {status} {time_out}", color = int(server_data.get("accent_color"), 16))
@@ -45,6 +53,7 @@ class Profile(commands.Cog):
                 embed.set_footer(text="Принимает участие в тестировании и помогает серверу стать лучше")
             embed.set_thumbnail(url=user.avatar)
             await ctx.respond(embed = embed)
+        # If the user is the bot itself, display the bot's profile information
         if user.id == self.Bot.user.id:
             embed = discord.Embed(title = f'Привет, я {user.name}', description=f"Тег: <@{user.id}>", color = int(server_data.get("accent_color"), 16))
             embed.add_field(name = "Владелец", value=f"<@{server_data.get('admin_id')}>")
@@ -59,6 +68,7 @@ class Profile(commands.Cog):
             embed.set_thumbnail(url=user.avatar)
             await ctx.respond(embed = embed, view = BotLink())
         
+    # Function to get the status emoji based on the user's status
     def get_status_emoji(self, status):
         if status == discord.Status.online:
             return "🟢 в сети"

@@ -9,12 +9,14 @@ class SuggestButtons(discord.ui.View):
         self.suggestion_message_id = suggestion_message_id
         self.data = data
 
+    # Method to update the labels of the buttons based on the votes
     def update_buttons(self):
         accept_button = [x for x in self.children if x.custom_id == "accept"][0]
         deny_button = [x for x in self.children if x.custom_id == "deny"][0]
         accept_button.label = f"За ({self.data['accept_count']})"
         deny_button.label = f"Против ({self.data['deny_count']})"
 
+    # Custom method to check if the user has already voted on this suggestion
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         # Check if the user has already voted on this suggestion
         if interaction.user.id in self.data["voted_users"]:
@@ -22,6 +24,7 @@ class SuggestButtons(discord.ui.View):
             return False
         return True
 
+    # Button callback for voting "За"
     @discord.ui.button(label="За", style=discord.ButtonStyle.green, emoji="<:MinecraftAccept:936636758135828502>", custom_id='accept')
     async def accept_button_callback(self, button, interaction):
         SuggestionsCollection = myclient[f"{str(interaction.guild.id)}"]["Suggestions"]
@@ -36,6 +39,7 @@ class SuggestButtons(discord.ui.View):
             {"$set": self.data},
         )
 
+    # Button callback for voting "Против"
     @discord.ui.button(label="Против", style=discord.ButtonStyle.red, emoji="<:MinecraftDeny:936636758127439883>", custom_id='deny')
     async def deny_button_callback(self, button, interaction):
         SuggestionsCollection = myclient[f"{str(interaction.guild.id)}"]["Suggestions"]
@@ -84,8 +88,10 @@ class Suggest(commands.Cog):
             name='Автор',
             value=f'<@{ctx.author.id}>'
         )
+        # Send a message with the suggestion embed and get the response object
         suggestions_msg = await ctx.respond(embed=suggestEmbed)
         suggestions_message = await suggestions_msg.original_response()
+         # Prepare the data for the suggestion and insert it into the database
         suggestion_data = {
             "_id": suggestions_message.id,
             "accept_count": 0,
@@ -93,6 +99,7 @@ class Suggest(commands.Cog):
             "voted_users": []
         }
         SuggestionsCollection.insert_one(suggestion_data)
+        # Create the SuggestButtons view for the suggestion message and edit the message with it
         suggest_buttons = SuggestButtons(suggestions_message.id, suggestion_data)
         await suggestions_message.edit(view=suggest_buttons)
         suggest_buttons.update_buttons()

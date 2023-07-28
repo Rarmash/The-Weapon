@@ -8,21 +8,41 @@ class Logger(commands.Cog):
         self.bot = bot
         self.servers_data = servers_data
 
+    # Helper functions to check if a channel, user, or category is allowed
+    def is_channel_allowed(self, channel_id, server_data):
+        return channel_id not in server_data.get("bannedChannels", [])
+
+    def is_user_allowed(self, user_id, server_data):
+        return user_id not in server_data.get("bannedUsers", [])
+
+    def is_category_allowed(self, category_id, server_data):
+        return category_id not in server_data.get("bannedCategories", [])
+
+    # Listen for the on_message_delete event to log deleted messages
     @commands.Cog.listener()
     async def on_message_delete(self, ctx):
         server_data = self.servers_data.get(str(ctx.guild.id))
         if not server_data:
             return
-        channel = self.bot.get_channel(server_data.get("log_channel"))
-        author = ctx.author.id
-        Collection = myclient[f"{str(ctx.guild.id)}"]["Users"]
-        if ctx.channel.id in server_data.get("bannedChannels", []) or author in server_data.get("bannedUsers", []) or ctx.channel.category_id in server_data.get("bannedCategories", []):
+
+        # Check if the channel, user, and category are allowed
+        if not self.is_channel_allowed(ctx.channel.id, server_data) or \
+                not self.is_user_allowed(ctx.author.id, server_data) or \
+                not self.is_category_allowed(ctx.channel.category_id, server_data):
             return
-        user = Collection.find_one({"_id": str(author)})
+
+        # Get the log channel
+        channel = self.bot.get_channel(server_data.get("log_channel"))
+        author_id = str(ctx.author.id)
+        Collection = myclient[f"{str(ctx.guild.id)}"]["Users"]
+        user = Collection.find_one({"_id": author_id})
         if user:
-            Collection.update_one({"_id": str(author)}, {"$set": {"messages": user.get("messages", 0) - 1}})
+            # Reduce the user's message count by 1
+            Collection.update_one({"_id": author_id}, {"$set": {"messages": user.get("messages", 0) - 1}})
         else:
-            Collection.insert_one({"_id": str(author), "messages": -1, "timeouts": 0})
+            Collection.insert_one({"_id": author_id, "messages": -1, "timeouts": 0})
+
+        # Create an embed to log the deleted message
         embed = discord.Embed(
             title='Удалённое сообщение',
             description=ctx.content,
@@ -30,29 +50,44 @@ class Logger(commands.Cog):
         )
         embed.add_field(
             name='Автор',
-            value=f'<@{author}>'
+            value=f'<@{author_id}>'
         )
         embed.add_field(
             name='Канал',
             value=f'<#{ctx.channel.id}>'
         )
-        for attach in ctx.attachments:
+
+        # If the message had attachments, send the attachment along with the embed
+        if ctx.attachments:
+            attach = ctx.attachments[0]
             imgn = attach.filename
             img = io.BytesIO(await attach.read())
-        try:
-            await channel.send(file = discord.File(img, imgn), embed=embed)
-        except UnboundLocalError:
+            try:
+                await channel.send(file=discord.File(img, imgn), embed=embed)
+            except UnboundLocalError:
+                await channel.send(embed=embed)
+        else:
             await channel.send(embed=embed)
 
+    # Listen for the on_message_edit event to log message edits
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):
         guild_id = str(before.guild.id)
         server_data = self.servers_data.get(guild_id)
         if not server_data:
             return
-        if before.channel.id in server_data.get("bannedChannels", []) or before in server_data.get("bannedUsers", []) or before.channel.category_id in server_data.get("bannedCategories", []) or before.content == after.content:
+
+        # Check if the channel, user, and category are allowed, and the content is changed
+        if not self.is_channel_allowed(before.channel.id, server_data) or \
+                not self.is_user_allowed(before.author.id, server_data) or \
+                not self.is_category_allowed(before.channel.category_id, server_data) or \
+                before.content == after.content:
             return
+
+        # Get the log channel
         channel = self.bot.get_channel(server_data.get("log_channel"))
+
+        # Create an embed to log the message edit
         embed = discord.Embed(
             color=int(server_data.get("accent_color"), 16)
         )
@@ -74,6 +109,7 @@ class Logger(commands.Cog):
             name='Канал',
             value=f'<#{before.channel.id}>'
         )
+
         await channel.send(embed=embed)
 
 

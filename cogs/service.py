@@ -14,13 +14,13 @@ class Service(commands.Cog):
     
     service = SlashCommandGroup("service", "Сервисные команды")
     
+    # Slash command to view server information
     @commands.slash_command(description='Посмотреть карточку сервера')
     async def server(self, ctx):
         server_data = self.servers_data.get(str(ctx.guild.id))
         if not server_data:
             return
         guild = ctx.guild
-        date_format = "%#d.%#m.%Y в %H:%M:%S"
         embed = discord.Embed(title=f"Информация о сервере {guild}", color = int(server_data.get("accent_color"), 16))
         embed.set_thumbnail(url=guild.icon)
         embed.add_field(name="Описание", value=guild.description)
@@ -29,10 +29,11 @@ class Service(commands.Cog):
         embed.add_field(name="Бустеров", value=len(guild.premium_subscribers))
         embed.add_field(name="Участников", value=guild.member_count-len(([member for member in ctx.guild.members if member.bot])))
         embed.add_field(name="Ботов", value=len(([member for member in ctx.guild.members if member.bot])))
-        embed.add_field(name="Создан", value=f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(guild.created_at.strftime(date_format)), '%d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
+        embed.add_field(name="Создан", value=f"<t:{ceil(time.mktime(datetime.datetime.strptime(str(guild.created_at.strftime('%#d.%#m.%Y в %H:%M:%S')), '%#d.%m.%Y в %H:%M:%S').timetuple()))}:f>")
         embed.add_field(name="Владелец", value=f"<@{guild.owner.id}>")
         await ctx.respond(embed=embed)
-           
+
+    # Subcommand to send bot information in a private message
     @service.command(description='Отправить инфу по боту')
     async def botsecret(self, ctx):
         server_data = self.servers_data.get(str(ctx.guild.id))
@@ -44,6 +45,7 @@ class Service(commands.Cog):
         else:
             await ctx.respond("Недостаточно прав для выполнения данной команды.")   
 
+    # Subcommand to shut down the bot
     @service.command(description='Выключить бота')
     async def shutdown(self, ctx):
         server_data = self.servers_data.get(str(ctx.guild.id))
@@ -54,7 +56,8 @@ class Service(commands.Cog):
             os.abort()
         else:
             await ctx.respond("Недостаточно прав для выполнения данной команды.")
-            
+
+    # Subcommand to unload a cog
     @service.command()
     async def unload(self, ctx, extension):
         server_data = self.servers_data.get(str(ctx.guild.id))
@@ -66,6 +69,7 @@ class Service(commands.Cog):
         else:
             await ctx.respond("Недостаточно прав для выполнения данной команды.")
 
+    # Subcommand to load a cog
     @service.command()
     async def load(self, ctx, extension):
         server_data = self.servers_data.get(str(ctx.guild.id))
@@ -77,6 +81,7 @@ class Service(commands.Cog):
         else:
             await ctx.respond("Недостаточно прав для выполнения данной команды.")
 
+    # Subcommand to reload a cog
     @service.command()
     async def reload(self, ctx, extension):
         server_data = self.servers_data.get(str(ctx.guild.id))
